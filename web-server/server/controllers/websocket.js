@@ -1,4 +1,4 @@
-// Imports;
+// IMPORTS.
 const http = require("http");
 const WebSocketServer = require("websocket").server
 

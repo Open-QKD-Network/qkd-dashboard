@@ -1,4 +1,5 @@
-const post = require("../models/posts");
+// IMPORTS.
+const post = require("../models/location");
 
 module.exports = class API {
     static async fetchAllPosts(req, res) {
