@@ -1,5 +1,5 @@
 // IMPORTS
 const websocket = require("./controllers/websockets");
 
-websocket.demoWebSocket();
+websocket.siteWebSocket();
 

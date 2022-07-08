@@ -2,7 +2,13 @@
 const post = require("../models/location");
 
 module.exports = class API {
-    static async fetchAllPosts(req, res) {
+
+    /**
+     * Fetches all locaions 
+     * @param {any} req http request object.
+     * @param {any} res http response object.
+     */
+    static async fetchAllLocationsAsync(req, res) {
         try  {
             const posts = await post.find();
             res.status(200).json(posts);
@@ -11,8 +17,7 @@ module.exports = class API {
         }
     }
 
-    static async createPost(req, res) {
-        // req.query
+    static async createLocationAsync(req, res) {
         const posts = req.body;  
         console.log(posts);
         try  {
@@ -21,6 +26,10 @@ module.exports = class API {
         } catch (err) {
             res.status(404).json({message: err.message});
         }
+    }
+
+    static async fetchIdLocationAsync (req, res) {
+        
     }
     
 };
