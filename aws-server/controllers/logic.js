@@ -44,7 +44,7 @@ module.exports = class logicControllers {
         }
 
         var siteClass = new site.Site({"siteId": siteId, "ip": ip});
-        return JSON.stringify(siteClass);
+        return siteClass;
     }
 
     /**
@@ -60,7 +60,7 @@ module.exports = class logicControllers {
             for (var i in routesJson) {
                 neighbours.push(new site.Site({"siteId": i, "ip": routesJson[i]}));
             }
-            return JSON.stringify(neighbours);
+            return neighbours;
         } catch (e) {
             throw new Error("Site ID path doesn't exist.");
         }
