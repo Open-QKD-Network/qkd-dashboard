@@ -1,7 +1,7 @@
 // IMPORTS.
 const post = require("../models/location");
 
-module.exports = class API {
+module.exports = class LocationApi {
 
     /**
      * Fetches all locaions 

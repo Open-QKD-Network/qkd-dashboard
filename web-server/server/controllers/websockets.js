@@ -1,11 +1,12 @@
 // IMPORTS.
 const http = require("http");
 const WebSocketServer = require("websocket").server
+require('dotenv').config();
 
 
 module.exports = class websocketControllers{
 
-    static demoWebSocket() {
+    static keyCountWebSocket() {
         let connection = null;
     
         const httpserver = http.createServer((req, res) => {

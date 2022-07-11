@@ -23,7 +23,8 @@ mongoose.connect(process.env.DB_URI, {
     .catch((err) => console.log("FAILED TO CONNECT TO DATABASE '" + process.env.DB_URI + "' : " + err));
 
 // Routes Prefix.   
-app.use("/api/v1", require("./routes/routes"));
+app.use("/api/v1/location", require("./routes/locationRoutes"));
+app.use("/api/v1/topology", require("./routes/topologyRoutes"));
 
 // Websocket Prefix.
 websocket.demoWebSocket();
