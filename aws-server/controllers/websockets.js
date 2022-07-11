@@ -11,7 +11,7 @@ module.exports = class websocketControllers{
     /**
      * Creates a websocket connection that send siteId on message.
      */
-    static siteWebSocket () {
+    static topologyWebSocket () {
         let connection = null;
 
         const httpserver = http.createServer((req, res) => {
@@ -20,10 +20,10 @@ module.exports = class websocketControllers{
 
         const websocket = new WebSocketServer({
             "httpServer": httpserver,
-            "path": "getSiteId"
+            "path": "getTopology"
         })
 
-        httpserver.listen(process.env.PORT, () => console.log(`SERVER IS LISTENING ON 'ws://${process.env.ADDRESS}:${process.env.PORT}/getSiteId'`));
+        httpserver.listen(process.env.PORT, () => console.log(`SERVER IS LISTENING ON 'ws://${process.env.ADDRESS}:${process.env.PORT}/getTopology'`));
 
         websocket.on("request", request => {
 
@@ -32,7 +32,7 @@ module.exports = class websocketControllers{
             connection.on("close", () => console.log("CLOSED CONNECTION ON ORIGIN: " + request.origin));
             connection.on("message", message => {
                 try {
-                connection.send(logic.getSiteId());
+                connection.send(logic.getTopology());
                 } catch (e) {
                     console.log(e);
                 }

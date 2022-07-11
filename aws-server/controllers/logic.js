@@ -8,11 +8,21 @@ const topology = require('../models/topologyModel');
  */
 module.exports = class logicControllers {
 
+
+    static getTopology() {
+        try {
+            var topologyClass = new topology.Topology({"current": this.getCurrentInfo(), "neighbours": this.getNeigbourInfo()});
+        } catch (e) {
+            console.log(e);
+            throw new Error("ERROR WHEN CREATING TOPOLOGY");
+        }
+    }
+
     /**
      * Retrieves the site ID and IP address from current node for the 
      * path specified in the .env file.
      */ 
-    static getCurrentInfo(params) {
+    static getCurrentInfo() {
         var siteId;
         var ip;
         try {
@@ -40,7 +50,7 @@ module.exports = class logicControllers {
      * Retrieves the site ID and IP address from path specified in the .env file
      * and returns list of neighbours sites.
      */ 
-     static getNeigbourInfo(params) {
+     static getNeigbourInfo() {
         try {
             var routesString = fs.readFileSync(process.env.ROUTES_JSON_PATH, 'utf8');
             var routesJson = JSON.parse(routesString);
@@ -49,7 +59,7 @@ module.exports = class logicControllers {
             for (var i in routesJson) {
                 neighbours.push(new site.Site({"siteId": i, "ip": routesJson[i]}));
             }
-            return neighbours;
+            return JSON.stringify(neighbours);
         } catch (e) {
             throw new Error("Site ID path doesn't exist.");
         }
