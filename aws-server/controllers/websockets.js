@@ -2,6 +2,8 @@
 const http = require("http");
 const WebSocketServer = require("websocket").server;
 const logic = require("./logic");
+
+
 /**
  * Websocket logic controllers.
  */
@@ -21,7 +23,7 @@ module.exports = class websocketControllers{
             "path": "getSiteId"
         })
 
-        httpserver.listen(8080, () => console.log(`SERVER IS LISTENING ON 'ws://localhost:8080/getSiteId'`));
+        httpserver.listen(process.env.PORT, () => console.log(`SERVER IS LISTENING ON 'ws://${process.env.ADDRESS}:${process.env.PORT}/getSiteId'`));
 
         websocket.on("request", request => {
 
