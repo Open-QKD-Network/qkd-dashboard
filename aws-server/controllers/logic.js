@@ -12,7 +12,7 @@ module.exports = class logicControllers {
 
     static getTopology() {
         try {
-            var topologyClass = new topology.Topology({"current": this.getCurrentInfo(), "neighbours": this.getNeigbourInfo()});
+            return new topology.Topology({"current": this.getCurrentInfo(), "neighbours": this.getNeigbourInfo()});
         } catch (e) {
             console.log(e);
             throw new Error("ERROR WHEN CREATING TOPOLOGY");
