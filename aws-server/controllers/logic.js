@@ -1,4 +1,5 @@
 //IMPORTS.
+require('dotenv').config()
 const fs = require('fs');
 const site = require('../models/siteModel');
 const topology = require('../models/topologyModel');

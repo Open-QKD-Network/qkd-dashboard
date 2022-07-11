@@ -2,6 +2,7 @@
 const http = require("http");
 const WebSocketServer = require("websocket").server;
 const logic = require("./logic");
+require('dotenv').config()
 
 
 /**
