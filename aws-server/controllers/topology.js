@@ -7,7 +7,7 @@ const topology = require('../models/topologyModel');
 /**
  * Class container for logic functions.
  */
-module.exports = class logicControllers {
+module.exports = class TopologyControllers {
 
 
     static getTopology() {

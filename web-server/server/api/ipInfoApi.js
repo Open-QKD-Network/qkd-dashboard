@@ -4,14 +4,14 @@ const post = require("../models/location");
 /**
  * 
  */
-module.exports = class LocationApi {
+module.exports = class IpInfoApi {
 
     /**
      * Fetches all locaions 
      * @param {any} req http request object.
      * @param {any} res http response object.
      */
-    static async fetchAllLocationsAsync(req, res) {
+    static async fetchAllIpInfoAsync(req, res) {
         try  {
             const posts = await post.find();
             res.status(200).json(posts);
@@ -20,7 +20,7 @@ module.exports = class LocationApi {
         }
     }
 
-    static async createLocationAsync(req, res) {
+    static async createIpInfoAsync(req, res) {
         const posts = req.body;  
         console.log(posts);
         try  {
@@ -31,7 +31,7 @@ module.exports = class LocationApi {
         }
     }
 
-    static async fetchIdLocationAsync (req, res) {
+    static async fetchIdIpInfoAsync (req, res) {
         
     }
     

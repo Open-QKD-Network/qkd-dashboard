@@ -3,7 +3,7 @@ require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-const websocket = require('./controllers/websocket');
+const websocket = require('./websockets/websockets');
 
 const app = express();
 const port = process.env.PORT; // check .env for such constants
@@ -24,10 +24,10 @@ mongoose.connect(process.env.DB_URI, {
 
 // Routes Prefix.   
 app.use("/api/v1/location", require("./routes/locationRoutes"));
-app.use("/api/v1/topology", require("./routes/topologyRoutes"));
+//app.use("/api/v1/topology", require("./routes/ipInfoRoutes"));
 
-// Websocket Prefix.
-websocket.demoWebSocket();
+// Websocket.
+websocket.crearteWebsocketChannels();
 
 
 // Start Server.
