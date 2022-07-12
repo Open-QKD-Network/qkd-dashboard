@@ -10,9 +10,6 @@ require('dotenv').config()
  */
 module.exports = class WebsocketControllers{
 
-    static port = 8080;
-    static portDictionary = {};
-
     /**
      * Creates a websocket connection that send siteId on message.
      */
