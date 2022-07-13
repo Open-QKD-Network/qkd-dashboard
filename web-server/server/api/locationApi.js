@@ -2,7 +2,7 @@
 const post = require("../models/location");
 
 /**
- * 
+ * Location API class.
  */
 module.exports = class LocationApi {
 

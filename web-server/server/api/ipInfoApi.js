@@ -2,7 +2,7 @@
 const post = require("../models/location");
 
 /**
- * 
+ * Ip Info API class.
  */
 module.exports = class IpInfoApi {
 

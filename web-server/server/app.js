@@ -24,10 +24,10 @@ mongoose.connect(process.env.DB_URI, {
 
 // Routes Prefix.   
 app.use("/api/v1/location", require("./routes/locationRoutes"));
-//app.use("/api/v1/topology", require("./routes/ipInfoRoutes"));
+//app.use("/api/v1/ipInfo", require("./routes/ipInfoRoutes"));
 
 // Websocket.
-websocket.crearteWebsocketChannels();
+websocketController = new websocket();
 
 
 // Start Server.

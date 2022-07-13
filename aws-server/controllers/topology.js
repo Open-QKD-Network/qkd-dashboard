@@ -9,7 +9,10 @@ const topology = require('../models/topologyModel');
  */
 module.exports = class TopologyControllers {
 
-
+    /**
+     * Retrieves Topology of cuttent node.
+     * @returns JSON of topology
+     */
     static getTopology() {
         try {
             return JSON.stringify(new topology.Topology({"current": this.getCurrentInfo(), "neighbours": this.getNeigbourInfo()}));

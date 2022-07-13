@@ -3,6 +3,7 @@ const http = require("http");
 const WebSocketServer = require("websocket").server;
 const topology = require("./topology");
 require('dotenv').config()
+const WebsocketCalls = require("../../constants/websocketCalls").WebsocketCalls;
 
 
 /**
@@ -34,11 +35,17 @@ module.exports = class WebsocketControllers{
             connection.on("open", () => console.log("OPENED CONNECTION ON ORIGIN: " + request.origin));
             connection.on("close", () => console.log("CLOSED CONNECTION ON ORIGIN: " + request.origin));
             connection.on("message", message => {
-                try {
-                connection.send(topology.getTopology());
-                } catch (e) {
-                    console.log(e);
-                }
+                switch(message.utf8Data) {
+                    case WebsocketCalls.topology:
+                        try {
+                            connection.send(topology.getTopology());
+                        } catch (e) {
+                            console.log(e);
+                        }
+                    default:
+                        console.log("INVALID MESSAGE DATA.");
+                };
+                
             });
         });
 
