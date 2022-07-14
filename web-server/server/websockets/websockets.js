@@ -51,7 +51,7 @@ module.exports = class websocketControllers{
                          * all with a topology message.
                          */
                         try {
-                            this.connection.send(length(this.ipAddresses));
+                            this.connection.send(JSON.stringify({length: this.ipAddresses.length}));
                         } catch (e) {
                             console.log(e);
                         }
@@ -103,7 +103,7 @@ module.exports = class websocketControllers{
         }
 
         ws.onmessage = (message) => {
-            this.connection.send(JSON.stringify(message.data));
+            this.connection.send(JSON.stringify({topology : JSON.parse(message.data)}));
         }
 
         this.websocketChannels[this.ipAddresses[index]] = ws;
