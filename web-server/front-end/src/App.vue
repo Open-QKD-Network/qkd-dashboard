@@ -1,14 +1,15 @@
 <template>
-  <Topology msg="Welcome to Your Vue.js App"/>
+  <CardClass title="QKD Network Topology" tab="topology"/>
+  <!-- <CardClass title="QKD Network Map" tab="network-map"/> -->
 </template>
 
 <script>
-import Topology from './components/topology.vue'
+import CardClass from './components/cards.vue'
 
 export default {
   name: 'App',
   components: {
-    Topology
+    CardClass
   }
 }
 </script>

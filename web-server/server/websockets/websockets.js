@@ -86,7 +86,7 @@ module.exports = class websocketControllers{
     crearteWebsocketChannels = function() {
         for (var i in this.ipAddresses) {
             try {
-                var ws = new WebSocketClient(`ws://${this.ipAddresses[i]}:8090/api/v1`);
+                var ws = new WebSocketClient(`ws://${this.ipAddresses[i]}:7070/api/v1`);
                 ws.onmessage = (message) => {
                     var localIp = this.ipAddresses[i];
                     this.response[localIp] = message.data;
