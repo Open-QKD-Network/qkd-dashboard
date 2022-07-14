@@ -18,7 +18,6 @@ module.exports = class websocketControllers{
         this.count = 0;
         this.connection = null;
         this.crearteIpAdresses();
-        this.crearteWebsocketChannels();
         this.createWebSocket();
         console.log(WebsocketCalls);
     }
@@ -77,30 +76,31 @@ module.exports = class websocketControllers{
     crearteIpAdresses = function() {
         /**TODO */
         this.ipAddresses.push("10.0.0.146");
+        this.crearteWebsocketChannels(this.ipAddresses[-1], this.ipAddresses.length -1);
         this.ipAddresses.push("10.0.0.135");
+        this.crearteWebsocketChannels(this.ipAddresses[-1], this.ipAddresses.length -1);
     }
 
 
     /**
      * Creates websocket client on backend for all IP addresses.
      */
-    crearteWebsocketChannels = function() {
-        for (var i in this.ipAddresses) {
-            var ws = new WebSocketClient(`ws://${this.ipAddresses[i]}:7070/api/v1`);
-            ws.onerror = (e) => {
-                console.log(`ERROR AT ${this.ipAddresses[i]}: ${e.message}`);
-                this.ipAddresses.splice(i, 1);
-            }
-
-            ws.onmessage = (message) => {
-                var localIp = this.ipAddresses[i];
-                this.response[localIp] = message.data;
-                this.checkForCompletion();
-            }
-
-            this.websocketChannels[this.ipAddresses[i]] = ws;
-        
+    crearteWebsocketChannels = function(index) {
+        var ws = new WebSocketClient(`ws://${this.ipAddresses[index]}:7070/api/v1`);
+        ws.onerror = (e) => {
+            console.log(`ERROR AT ${this.ipAddresses[index]}: ${e.message}`);
+            this.ipAddresses.splice(index, 1);
         }
+
+        ws.onmessage = (message) => {
+            var localIp = this.ipAddresses[index];
+            this.response[localIp] = message.data;
+            this.checkForCompletion();
+        }
+
+        this.websocketChannels[this.ipAddresses[index]] = ws;
+    
+        
     }
 
     /**
