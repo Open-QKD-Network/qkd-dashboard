@@ -1,117 +1,72 @@
-// IMPORTS.
-const { json } = require("express");
-const http = require("http");
-const WebSocketServer = require("websocket").server
-const WebSocketClient = require("ws")
-const WebsocketCalls = require("../../../constants/websocketCalls").WebsocketCalls;
-require('dotenv').config();
+//IMPORTS.
+require('dotenv').config()
+const fs = require('fs');
+const site = require('../models/siteModel');
+const topology = require('../models/topologyModel');
 
 /**
- * Backend websocket channel class.
+ * Class container for logic functions.
  */
-module.exports = class websocketControllers{
+module.exports = class TopologyControllers {
 
-    constructor () {
-        this.ipAddresses = [];
-        this.websocketChannels = {};
-        this.response = {};
-        this.count = 0;
-        this.connection = null;
-        this.crearteIpAdresses();
-        this.createWebSocket();
-        console.log(WebsocketCalls);
+    /**
+     * Retrieves Topology of cuttent node.
+     * @returns JSON of topology
+     */
+    static getTopology() {
+        try {
+            return JSON.stringify(new topology.Topology({"current": this.getCurrentInfo(), "neighbours": this.getNeigbourInfo()}));
+        } catch (e) {
+            console.log(e);
+            throw new Error("ERROR WHEN CREATING TOPOLOGY");
+        }
     }
 
     /**
-     * Creates websocket server on backend
-     */
-    createWebSocket = function() {
-        const httpserver = http.createServer((req, res) => {
-            console.log("We have recived a request");
-        });
-    
-        const websocket = new WebSocketServer({
-            "httpServer": httpserver,
-        })
-    
-        httpserver.listen(process.env.PORT_WS, () => console.log(`Server is listening on ws://${process.env.ADDRESS}:${process.env.PORT_WS}`));
+     * Retrieves the site ID and IP address from current node for the 
+     * path specified in the .env file.
+     */ 
+    static getCurrentInfo() {
+        var siteId;
+        var ip;
+        try {
+            siteId = fs.readFileSync(process.env.KMS_CONF_PATH, 'utf8');
+            siteId = siteId.split('\n')[3];
+        } catch (e) {
+            console.log(e)
+            throw new Error("ERROR WHEN RECIEVING SITE ID");
+        }
         
-        /**
-         * This is the main websocket logic handler (specifically message).
-         */
-        websocket.on("request", request => {
-    
-            this.connection = request.accept(null, request.origin);
-            this.connection.on("open", () => console.log("OPENED CONNECTION ON ORIGIN: " + request.origin));
-            this.connection.on("close", () => console.log("CLOSED CONNECTION ON ORIGIN: " + request.origin));
-            this.connection.on("message", message => {
-                console.log("RECIEVED MESSAGE!");
-                switch(message.utf8Data) {
-                    case  WebsocketCalls.topology: // Requested Topology.
-                        /**
-                         * In this case, we loop through all IP addresses and send a request to 
-                         * all with a topology message.
-                         */
-                        try {
-                            for (var ip in this.websocketChannels) {
-                                this.websocketChannels[ip].send(WebsocketCalls.topology);
-                            }
-                        } catch (e) {
-                            console.log(e);
-                        }
-                        break;
-                    default :
-                        console.log("INVALID MESSAGE DATA.");
-                }
-
-            });
-        });
-    
-    }
-
-
-    /**
-     * Creates list with all available IP addresses.
-     */
-    crearteIpAdresses = function() {
-        /**TODO */
-        this.ipAddresses.push("10.0.0.146");
-        this.crearteWebsocketChannels(this.ipAddresses[-1], this.ipAddresses.length -1);
-        this.ipAddresses.push("10.0.0.135");
-        this.crearteWebsocketChannels(this.ipAddresses[-1], this.ipAddresses.length -1);
-    }
-
-
-    /**
-     * Creates websocket client on backend for all IP addresses.
-     */
-    crearteWebsocketChannels = function(index) {
-        var ws = new WebSocketClient(`ws://${this.ipAddresses[index]}:7070/api/v1`);
-        ws.onerror = (e) => {
-            console.log(`ERROR AT ${this.ipAddresses[index]}: ${e.message}`);
-            this.ipAddresses.splice(index, 1);
+        try {
+            var siteagentString = fs.readFileSync(process.env.SITEAGENT_JSON_PATH, 'utf8');
+            var siteagentJson = JSON.parse(siteagentString);
+            ip = siteagentJson['url'];
+        } catch (e) {
+            console.log(e)
+            throw new Error("ERROR WHEN RECIEVING IP");
         }
 
-        ws.onmessage = (message) => {
-            var localIp = this.ipAddresses[index];
-            this.response[localIp] = message.data;
-            this.checkForCompletion();
-        }
-
-        this.websocketChannels[this.ipAddresses[index]] = ws;
-    
-        
+        var siteClass = new site.Site({"siteId": siteId, "ip": ip});
+        return siteClass;
     }
 
     /**
-     * Detects if all IP addresses have returned a message call and resets configuration.
-     */
-    checkForCompletion = function() {
-        if (this.response.length == this.ipAddresses.length) {
-            this.connection.send(JSON.stringify(this.response));
+     * Retrieves the site ID and IP address from path specified in the .env file
+     * and returns list of neighbours sites.
+     */ 
+     static getNeigbourInfo() {
+        try {
+            var routesString = fs.readFileSync(process.env.ROUTES_JSON_PATH, 'utf8');
+            var routesJson = JSON.parse(routesString);
+            routesJson = routesJson["adjacent"];
+            var neighbours = [];
+            for (var i in routesJson) {
+                neighbours.push(new site.Site({"siteId": i, "ip": routesJson[i]}));
+            }
+            return neighbours;
+        } catch (e) {
+            throw new Error("Site ID path doesn't exist.");
         }
-        this.response = {};
-        this.count = 0;
     }
-}
 
+}  
