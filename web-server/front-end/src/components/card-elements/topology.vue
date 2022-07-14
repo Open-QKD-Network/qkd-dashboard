@@ -58,7 +58,7 @@ export default {
         var ws = new WebSocket("ws://localhost:7000");
         ws.onmessage = (message) => {
             console.log(message);
-            ipCount++;
+            this.ipCount++;
 
             var jsonData = JSON.parse(message.data);
             switch (jsonData.key) {
