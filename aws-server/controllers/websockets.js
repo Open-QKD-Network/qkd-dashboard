@@ -42,6 +42,7 @@ module.exports = class WebsocketControllers{
                         } catch (e) {
                             console.log(e);
                         }
+                        break;
                     default:
                         console.log("INVALID MESSAGE DATA.");
                 };

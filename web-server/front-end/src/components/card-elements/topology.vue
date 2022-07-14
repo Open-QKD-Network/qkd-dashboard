@@ -7,12 +7,16 @@
 </template>
 
 <script>
+import {WebsocketCalls} from '../../../../../constants/websocketCalls'
+
+
 export default {
   name: 'TopologyClass',
 
   // Method Functions
   methods: {
-    graph() {
+    graph(model) {
+        console.log(model);
         const successStyle = {
             stroke: '#00ff00',
             fill: '#00ff00',
@@ -44,11 +48,14 @@ export default {
   }, 
 
   mounted() {
-    var ws = new WebSocket("ws://localhost:7000"); 
-    ws.onmessage = () => {
-        this.graph();
+    var ws = new WebSocket("ws://localhost:7000");
+    ws.onmessage = (message) => {
+        console.log(message);
+        this.graph(JSON.parse(message.data));
     };
-    
+    ws.onopen = () => {
+        ws.send(WebsocketCalls.topology)
+    };
   }
 }
 </script>
