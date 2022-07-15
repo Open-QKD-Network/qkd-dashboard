@@ -22,8 +22,7 @@ export default {
         /**
          * 
          */
-        graph(model) {
-            console.log(model);
+        graph() {
             const successStyle = {
                 stroke: '#00ff00',
                 fill: '#00ff00',
@@ -69,12 +68,14 @@ export default {
                 case "length":
                     this.ipTotal = jsonData["length"];
                     ws.send(WebsocketCalls.topology)
+                    break;
                 case "topology":
                     this.ipCount++;
-                    topologies.push(jsonData["topology"]);
+                    this.topologies.push(jsonData["topology"]);
                     if (this.ipCount == this.ipLength) {
-                        graph(model)
+                        this.graph()
                     }
+                    break;
                 default:
                     console.log(jsonData.key);
             }
