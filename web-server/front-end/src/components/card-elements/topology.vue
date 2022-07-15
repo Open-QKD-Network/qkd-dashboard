@@ -14,8 +14,8 @@ export default {
     name: 'TopologyClass',
     provide:{
         ipTotal:0,
-        ipCount:0,
-        topology: {}
+        ipLength:0,
+        topologies: []
     },
     // Method Functions
     methods: {
@@ -57,17 +57,30 @@ export default {
     mounted() {
         var ws = new WebSocket("ws://localhost:7000");
         ws.onmessage = (message) => {
-            console.log(message);
-            this.ipCount++;
-
             var jsonData = JSON.parse(message.data);
-            switch (jsonData.key) {
+            var key = "";
+            var keys = Object.keys();
+
+            if (keys.length != 0) {
+                key = keys[0];
+            }
+            
+            switch (key) {
+                case "length":
+                    this.ipTotal = jsonData["length"];
+                    ws.send(WebsocketCalls.topology)
+                case "topology":
+                    this.ipCount++;
+                    topologies.push(jsonData["topology"]);
+                    if (this.ipCount == this.ipLength) {
+                        graph(model)
+                    }
                 default:
                     console.log(jsonData.key);
             }
         };
         ws.onopen = () => {
-            ws.send(WebsocketCalls.topology)
+            ws.send(WebsocketCalls.ipCount);
         };
     }
 }
