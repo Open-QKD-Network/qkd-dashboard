@@ -24,7 +24,7 @@ mongoose.connect(process.env.DB_URI, {
 
 // Routes Prefix.   
 app.use("/api/v1/location", require("./routes/locationRoutes"));
-//app.use("/api/v1/ipInfo", require("./routes/ipInfoRoutes"));
+app.use("/api/v1/ipInfo", require("./routes/ipInfoRoutes"));
 
 // Websocket.
 websocketController = new websocket();

@@ -1,5 +1,5 @@
 // IMPORTS.
-const post = require("../models/location");
+const location = require("../models/location");
 
 /**
  * Location API class.
@@ -13,26 +13,68 @@ module.exports = class LocationApi {
      */
     static async fetchAllLocationsAsync(req, res) {
         try  {
-            const posts = await post.find();
+            const posts = await location.find();
             res.status(200).json(posts);
         } catch (err) {
             res.status(404).json({message: err.message});
         }
     }
 
+    static async fetchIdLocationAsync (req, res) {
+        const id = req.param.id;
+        try {
+             const locationById = await location.findById(id);
+             res.status(200).json(locationById);
+        }  catch (err) {
+             res.status(404).json({message: err.message});
+        }
+    }
+
+    static async fetchCityLocationAsync (req, res) {
+        const city = req.param.city;
+        try {
+             const locationByCity = await location.findOne({city: city});
+             res.status(200).json(locationByCity);
+        }  catch (err) {
+             res.status(404).json({message: err.message});
+        }
+    }
+
     static async createLocationAsync(req, res) {
-        const posts = req.body;  
-        console.log(posts);
+        const newLocation = req.body;  
+        console.log(newLocation);
         try  {
-            await post.create(posts);
+            await location.create(newLocation);
             res.status(201).json({message: "Post Created Succesfully"});
         } catch (err) {
             res.status(404).json({message: err.message});
         }
     }
 
-    static async fetchIdLocationAsync (req, res) {
-        
+    static async updateLocationAsync(req, res) {
+        const id = req.param.id;  
+        try  {
+            const locationById = await location.findById(id);
+
+            if (req.body.city) locationById.city = req.body.city
+            if (req.body.longitude) locationById.longitude = req.body.longitude
+            if (req.body.latitude) locationById.latitude = req.body.latitude
+
+            await locationById.save()
+            res.status(200).json({message: "Post Updated Succesfully"});
+        } catch (err) {
+            res.status(404).json({message: err.message});
+        }
     }
-    
+
+    static async deleteLocationAsync(req, res) {
+        const id = req.param.id;  
+        try  {
+            await location.findByIdAndDelete(id);
+
+            res.status(204).json({message: "Post Deleted Succesfully"});
+        } catch (err) {
+            res.status(404).json({message: err.message});
+        }
+    }
 };

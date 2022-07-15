@@ -1,14 +1,18 @@
 // IMPORTS.
 const { string } = require("joi");
-const locaion = require("./location");
+const location = require("../models/location");
 const mongoose = require("mongoose");
+
 
 /**
  * ipInfo Model Schema.
  */
 const ipInfoSchema = mongoose.Schema({
     ip: String,
-    locaion: locaion.locationsSchema,
+    locaion: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'location'
+        },
 });
 
-module.exports = mongoose.model("locations", locationsSchema);
+module.exports = mongoose.model("ipInfo", ipInfoSchema);
