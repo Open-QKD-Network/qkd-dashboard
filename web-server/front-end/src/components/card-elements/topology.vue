@@ -12,10 +12,12 @@ import {WebsocketCalls} from '../../../../../constants/websocketCalls'
 
 export default {
     name: 'TopologyClass',
-    provide:{
-        ipTotal:0,
-        ipLength:0,
-        topologies: []
+    data(){
+        return {
+            ipTotal:0,
+            ipLength:0,
+            topologies: []
+        }
     },
     // Method Functions
     methods: {
@@ -28,10 +30,10 @@ export default {
                 fill: '#00ff00',
             };
 
-            const failedStyle = {
-                stroke: '#ff0000',
-                fill: '#ff0000',
-            };
+            // const failedStyle = {
+            //     stroke: '#ff0000',
+            //     fill: '#ff0000',
+            // };
 
             var Dracula = require('graphdracula');
             var Graph = Dracula.Graph;
@@ -40,11 +42,19 @@ export default {
             
             var graph = new Graph();
             
-            graph.addEdge('Banana', 'Apple');
-            graph.addEdge('Apple', 'Kiwi');
-            graph.addEdge('Apple', 'Dragonfruit');
-            graph.addEdge('Dragonfruit', 'Banana', {style: failedStyle});
-            graph.addEdge('Kiwi', 'Banana', {style: successStyle});
+            for (var i in this.topologies) {
+                var currentSiteId = this.topologies[i]["current"]["siteId"];
+                var currentIp = this.topologies[i]["current"]["ip"];
+                
+                console.log(`${currentSiteId} - ${currentIp}`);
+                var neighbours = this.topologies[i]["neighbours"]
+                for (var j in neighbours) {
+                    var neigbourSiteId = neighbours[j]["siteId"];
+                    var neigbourIp = neighbours[j]["ip"];
+                    console.log(`${neigbourSiteId} - ${neigbourIp}`);
+                    graph.addEdge(`${currentSiteId} - ${currentIp}`, `${neigbourSiteId} - ${neigbourIp}`, {style: successStyle});
+                }
+            }
             
             var layout = new Layout(graph);
             layout.layout();
@@ -54,11 +64,12 @@ export default {
     }, 
 
     mounted() {
-        var ws = new WebSocket("ws://localhost:7000");
+        var ws = new WebSocket("ws://10.0.0.146:7000");
         ws.onmessage = (message) => {
             var jsonData = JSON.parse(message.data);
             var key = "";
-            var keys = Object.keys();
+            var keys = Object.keys(jsonData);
+            console.log(keys);
 
             if (keys.length != 0) {
                 key = keys[0];
@@ -68,12 +79,15 @@ export default {
                 case "length":
                     this.ipTotal = jsonData["length"];
                     ws.send(WebsocketCalls.topology)
+                    console.log(this.ipTotal);
                     break;
                 case "topology":
-                    this.ipCount++;
+                    this.ipLength++;
+                    console.log(this.ipLength);
                     this.topologies.push(jsonData["topology"]);
-                    if (this.ipCount == this.ipLength) {
-                        this.graph()
+                    if (this.ipLength == this.ipTotal) {
+                        console.log(this.topologies);
+                        this.graph();
                     }
                     break;
                 default:
