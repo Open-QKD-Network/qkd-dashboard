@@ -12,17 +12,20 @@ import {WebsocketCalls} from '../../../../../constants/websocketCalls'
 
 export default {
     name: 'TopologyClass',
+    /**
+     * Returns Variables.
+     */
     data(){
         return {
-            ipTotal:0,
-            ipLength:0,
-            topologies: []
+            ipTotal:0, // Total Number of available IPs.
+            ipLength:0, // Number current IPs accesed.
+            topologies: [] // List of topology JSON objects.
         }
     },
     // Method Functions
     methods: {
         /**
-         * 
+         * Creates node graph by looping though @topologies and adding an edge bwtween each IP and its neighbour.
          */
         graph() {
             const successStyle = {

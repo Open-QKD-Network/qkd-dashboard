@@ -18,10 +18,16 @@ import TopologyClass from './card-elements/topology.vue'
 
 export default {
   name: 'CardClass',
+  /**
+   * Dependancy variables (variables you need to provide).
+   */
   props: {
     title: String,
     tab: String
    },
+   /**
+    * Used Components.
+    */
    components: {
     TopologyClass
    }

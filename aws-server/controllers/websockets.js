@@ -36,6 +36,10 @@ module.exports = class WebsocketControllers{
             connection.on("close", () => console.log("CLOSED CONNECTION ON ORIGIN: " + request.origin));
             connection.on("message", message => {
                 switch(message.utf8Data) {
+                    /**
+                     * In this case, we will send back the topology of the local machine by invoking
+                     * getTopology().
+                     */
                     case WebsocketCalls.topology:
                         try {
                             connection.send(topology.getTopology());
