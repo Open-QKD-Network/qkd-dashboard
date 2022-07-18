@@ -4,7 +4,10 @@ const http = require("http");
 const WebSocketServer = require("websocket").server
 const WebSocketClient = require("ws")
 const WebsocketCalls = require("../../../constants/websocketCalls").WebsocketCalls;
+const ipInfo = require("../models/ipInfo");
+
 require('dotenv').config();
+
 
 /**
  * Backend websocket channel class.
@@ -17,7 +20,6 @@ module.exports = class websocketControllers{
         this.connection = null;
         this.crearteIpAdresses();
         this.createWebSocket();
-        console.log(WebsocketCalls);
     }
 
     /**
@@ -84,11 +86,11 @@ module.exports = class websocketControllers{
      * Creates list with all available IP addresses.
      */
     crearteIpAdresses = function() {
-        /**TODO */
-        this.ipAddresses.push("10.0.0.146");
-        this.crearteWebsocketChannels(this.ipAddresses.length -1);
-        this.ipAddresses.push("10.0.0.135");
-        this.crearteWebsocketChannels(this.ipAddresses.length -1);
+        // /**TODO */
+        // this.ipAddresses.push("10.0.0.146");
+        // this.crearteWebsocketChannels(this.ipAddresses.length -1);
+        // this.ipAddresses.push("10.0.0.135");
+        // this.crearteWebsocketChannels(this.ipAddresses.length -1);
     }
 
 

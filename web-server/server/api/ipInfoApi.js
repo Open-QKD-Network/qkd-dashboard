@@ -60,11 +60,13 @@ module.exports = class IpInfoApi {
         try  {
             const ip = req.body.ip;
             const locationId = req.body.locationId;
-            
-            await ipInfo.create({
-                ip: ip,
-                locaion: locaions.findById(locationId)
-            });
+            locaions.findById(locationId).exec(async function(err, json) {
+                await ipInfo.create({
+                    ip: ip,
+                    locaion: json
+                });
+            })
+
             res.status(201).json({message: "Post Created Succesfully"});
         } catch (err) {
             res.status(404).json({message: err.message});
