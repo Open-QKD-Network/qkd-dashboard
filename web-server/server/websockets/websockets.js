@@ -86,11 +86,13 @@ module.exports = class websocketControllers{
      * Creates list with all available IP addresses.
      */
     crearteIpAdresses = function() {
-        // /**TODO */
-        // this.ipAddresses.push("10.0.0.146");
-        // this.crearteWebsocketChannels(this.ipAddresses.length -1);
-        // this.ipAddresses.push("10.0.0.135");
-        // this.crearteWebsocketChannels(this.ipAddresses.length -1);
+        ipInfoJson = await ipInfo.find();
+
+        for (var i in ipInfoJson) {
+            ipAddresses.push(ipInfoJson[i].ip);
+        }
+
+        console.log(ipAddresses);
     }
 
 
