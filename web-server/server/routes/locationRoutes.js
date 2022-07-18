@@ -11,6 +11,6 @@ router.get('/fetch/id/:id', API.fetchIdLocationAsync)
 router.get('/fetch/city/:city', API.fetchCityLocationAsync)
 router.post('/create', API.createLocationAsync)
 router.patch('/update/:id', API.updateLocationAsync)
-router.delete('delete/:id', API.deleteLocationAsync)
+router.delete('/delete/:id', API.deleteLocationAsync)
 
 module.exports = router;

@@ -7,7 +7,7 @@ const locaions = require("../models/location")
 module.exports = class IpInfoApi {
 
     /**
-     * Fetches all locaions 
+     * Fetches all IpInfo. 
      * @param {any} req http request object.
      * @param {any} res http response object.
      */
@@ -20,8 +20,13 @@ module.exports = class IpInfoApi {
         }
     }
 
+    /**
+     * Fetches IpInfo with given ID. 
+     * @param {any} req http request object.
+     * @param {any} res http response object.
+     */
     static async fetchIdIpInfoAsync (req, res) {
-        const id = req.param.id;
+        const id = req.params.id;
         try {
             ipInfoById = await ipInfo.findById(id);
             res.status(200).json(ipInfoById);
@@ -30,20 +35,32 @@ module.exports = class IpInfoApi {
         }
      }
 
+     /**
+     * Fetches IpInfo with given IP. 
+     * @param {any} req http request object.
+     * @param {any} res http response object.
+     */
      static async fetchIpIpInfoAsync (req, res) {
-        const ip = req.param.ip;
         try {
-             const ipInfoById = await ipInfo.findOne({ip: ip});
-             res.status(200).json(ipInfoById);
+            const ip = req.params.ip;
+
+            const ipInfoById = await ipInfo.findOne({ip: ip});
+            res.status(200).json(ipInfoById);
         }  catch (err) {
-             res.status(404).json({message: err.message});
+            res.status(404).json({message: err.message});
         }
      }
 
-    static async createIpInfoAsync(req, res) {
-        const ip = req.body.ip;
-        const locationId = req.body.locationId;  
+    /**
+     * Creates new IpInfo. 
+     * @param {any} req http request object.
+     * @param {any} res http response object.
+     */
+    static async createIpInfoAsync(req, res) {  
         try  {
+            const ip = req.body.ip;
+            const locationId = req.body.locationId;
+            
             await ipInfo.create({
                 ip: ip,
                 locaion: locaions.findById(locationId)
@@ -54,6 +71,11 @@ module.exports = class IpInfoApi {
         }
     }
 
+    /**
+     * Updates IpInfo with given ID. 
+     * @param {any} req http request object.
+     * @param {any} res http response object.
+     */
     static async updateIpInfoAsync(req, res) {
         try  { 
             const ipInfoById = await location.findById(id);
@@ -68,8 +90,13 @@ module.exports = class IpInfoApi {
         }
     }
     
+    /**
+     * Deletes IpInfo with given ID. 
+     * @param {any} req http request object.
+     * @param {any} res http response object.
+     */
     static async deleteIpInfoAsync(req, res) {
-        const id = req.param.id;  
+        const id = req.params.id;  
 
         try  {
             await ipInfo.findByIdAndDelete(id);

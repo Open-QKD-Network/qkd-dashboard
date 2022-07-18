@@ -10,7 +10,7 @@ const mongoose = require("mongoose");
 const ipInfoSchema = mongoose.Schema({
     ip: String,
     locaion: {
-        type: mongoose.Schema.Types.ObjectId,
+        type: mongoose.Schema.Types.Mixed,
         ref: 'location'
         },
 });

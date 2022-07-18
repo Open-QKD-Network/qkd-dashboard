@@ -20,8 +20,13 @@ module.exports = class LocationApi {
         }
     }
 
+    /**
+     * Fetches locaion with given ID. 
+     * @param {any} req http request object.
+     * @param {any} res http response object.
+     */
     static async fetchIdLocationAsync (req, res) {
-        const id = req.param.id;
+        const id = req.params.id;
         try {
              const locationById = await location.findById(id);
              res.status(200).json(locationById);
@@ -30,8 +35,13 @@ module.exports = class LocationApi {
         }
     }
 
+    /**
+     * Fetches locaion with given city. 
+     * @param {any} req http request object.
+     * @param {any} res http response object.
+     */
     static async fetchCityLocationAsync (req, res) {
-        const city = req.param.city;
+        const city = req.params.city;
         try {
              const locationByCity = await location.findOne({city: city});
              res.status(200).json(locationByCity);
@@ -40,6 +50,11 @@ module.exports = class LocationApi {
         }
     }
 
+    /**
+     * Creates new locaion. 
+     * @param {any} req http request object.
+     * @param {any} res http response object.
+     */
     static async createLocationAsync(req, res) {
         const newLocation = req.body;  
         console.log(newLocation);
@@ -51,8 +66,13 @@ module.exports = class LocationApi {
         }
     }
 
+    /**
+     * Updates locaion with given ID. 
+     * @param {any} req http request object.
+     * @param {any} res http response object.
+     */
     static async updateLocationAsync(req, res) {
-        const id = req.param.id;  
+        const id = req.params.id;  
         try  {
             const locationById = await location.findById(id);
 
@@ -67,8 +87,13 @@ module.exports = class LocationApi {
         }
     }
 
+    /**
+     * Deletes locaion with given ID. 
+     * @param {any} req http request object.
+     * @param {any} res http response object.
+     */
     static async deleteLocationAsync(req, res) {
-        const id = req.param.id;  
+        const id = req.params.id;  
         try  {
             await location.findByIdAndDelete(id);
 
