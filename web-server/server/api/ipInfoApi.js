@@ -80,10 +80,10 @@ module.exports = class IpInfoApi {
      */
     static async updateIpInfoAsync(req, res) {
         try  { 
-            const ipInfoById = await location.findById(id);
+            const ipInfoById = await location.findById(req.params.id);
 
             if (req.body.ip) ipInfoById.ip = req.body.ip
-            if (req.body.locationId) ipInfoById.locaion = locaions.findById(req.body.locationId)
+            if (req.body.locationId) ipInfoById.locaion = locaions.findById(req.body.locationId) // CHANGE THIS
 
             await ipInfoById.save()
             res.status(201).json({message: "Post Created Succesfully"});
