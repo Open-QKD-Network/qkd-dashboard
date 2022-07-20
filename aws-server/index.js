@@ -3,7 +3,7 @@ const websocket = require("./controllers/websockets");
 const express = require('express');
 const cors = require('cors');
 
-const app = express;
+const app = express();
 const port = process.env.PORT_REST;
 
 // Middleware.
