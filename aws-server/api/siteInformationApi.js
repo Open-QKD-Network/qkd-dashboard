@@ -1,5 +1,7 @@
+const topology = require("../controllers/topology");
+
 /**
- * Ip Info API class.
+ * Site Information API class.
  */
 module.exports = class siteInformationApi {
 
