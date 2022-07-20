@@ -1,7 +1,7 @@
 const ipInfo = require("../models/ipInfo");
 const topology = require("../controllers/topology");
 
-module.exports = class sitesApi {
+module.exports = class SitesApi {
 
     /**
      * Fetches all Topologies for the IPs in ipInfo. 

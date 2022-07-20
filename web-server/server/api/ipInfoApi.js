@@ -1,6 +1,6 @@
 // IMPORTS.
 const ipInfo = require("../models/ipInfo");
-const locaions = require("../models/location")
+const locations = require("../models/location")
 /**
  * Ip Info API class.
  */
@@ -60,7 +60,7 @@ module.exports = class IpInfoApi {
         try  {
             const ip = req.body.ip;
             const locationId = req.body.locationId;
-            locaions.findById(locationId).exec(async function(err, json) {
+            locations.findById(locationId).exec(async function(err, json) {
                 await ipInfo.create({
                     ip: ip,
                     locaion: json
@@ -80,10 +80,10 @@ module.exports = class IpInfoApi {
      */
     static async updateIpInfoAsync(req, res) {
         try  { 
-            const ipInfoById = await location.findById(req.params.id);
+            const ipInfoById = await ipInfo.findById(req.params.id);
 
             if (req.body.ip) ipInfoById.ip = req.body.ip
-            if (req.body.locationId) ipInfoById.locaion = locaions.findById(req.body.locationId) // CHANGE THIS
+            if (req.body.locationId) ipInfoById.locaion = locations.findById(req.body.locationId) // CHANGE THIS
 
             await ipInfoById.save()
             res.status(201).json({message: "Post Created Succesfully"});
