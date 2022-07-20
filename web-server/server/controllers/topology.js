@@ -11,7 +11,7 @@ module.exports = class Topology {
      * @returns async fetch call for the JSON of the topology for provided IP.
      */
     static async getTopologyAsync(ip) {
-        return fetch(`${ip}:7080/api/v1/siteInformation/topology`)
+        return fetch(`http://${ip}:7080/api/v1/siteInformation/topology`)
             .then(response=> response.json())
             .then((jsonResponse)=> {return jsonResponse});
     }

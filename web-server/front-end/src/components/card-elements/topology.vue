@@ -67,7 +67,7 @@ export default {
     }, 
 
     async mounted() {
-        await fetch("http://localhost:5000/api/v1//sites/fetch")
+        await fetch("http://localhost:5000/api/v1/sites/fetch")
             .then(response => response.json())
             .then((jsonResponse) => {
                 this.topologies = jsonResponse;
