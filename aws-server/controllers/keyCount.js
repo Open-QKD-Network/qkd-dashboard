@@ -4,7 +4,7 @@ const fs = require('fs');
 const topology = require("./topology");
 
 /**
- * 
+ * Class that handles key counts.
  */
 module.exports = class keyCount {
     constructor() {
@@ -12,11 +12,8 @@ module.exports = class keyCount {
         this.dest = process.env.KEYS_PATH;
     }
 
-    static getKeyCount(siteId) {
-        fs.readdirSync(this.dest + `/${siteId}`, (err, files) => {
-            console.log(files.length);
-            return files.length;
-        })
+    getKeyCount = function (siteId) {
+        return fs.readdirSync(`${this.dest}/${siteId}`).length;
     }
     
     
