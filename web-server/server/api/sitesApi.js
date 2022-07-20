@@ -16,7 +16,7 @@ module.exports = class SitesApi {
                     var ip = ipJson[i].ip;
                     topologies.push({[ip] : await topology.getTopologyAsync(ip)});
                 }
-                res.status(200).json(ipInfos);
+                res.status(200).json(topologies);
             });
         } catch (err) {
             res.status(404).json({message: err.message});
