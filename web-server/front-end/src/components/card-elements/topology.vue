@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import {WebsocketCalls} from '../../../../../constants/websocketCalls'
+import fetch from 'node-fetch';
 
 
 export default {
@@ -66,40 +66,13 @@ export default {
         }
     }, 
 
-    mounted() {
-        var ws = new WebSocket("ws://10.0.0.146:7000");
-        ws.onmessage = (message) => {
-            var jsonData = JSON.parse(message.data);
-            var key = "";
-            var keys = Object.keys(jsonData);
-            console.log(keys);
-
-            if (keys.length != 0) {
-                key = keys[0];
-            }
-            
-            switch (key) {
-                case "length":
-                    this.ipTotal = jsonData["length"];
-                    ws.send(WebsocketCalls.topology)
-                    console.log(this.ipTotal);
-                    break;
-                case "topology":
-                    this.ipLength++;
-                    console.log(this.ipLength);
-                    this.topologies.push(jsonData["topology"]);
-                    if (this.ipLength == this.ipTotal) {
-                        console.log(this.topologies);
-                        this.graph();
-                    }
-                    break;
-                default:
-                    console.log(jsonData.key);
-            }
-        };
-        ws.onopen = () => {
-            ws.send(WebsocketCalls.ipCount);
-        };
+    async mounted() {
+        await fetch("http://localhost:5000/api/v1//sites/fetch")
+            .then(response => response.json())
+            .then((jsonResponse) => {
+                this.topologies = jsonResponse;
+                this.graph();
+            })
     }
 }
 </script>

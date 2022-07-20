@@ -3,7 +3,7 @@ const topology = require("../controllers/topology");
 /**
  * Site Information API class.
  */
-module.exports = class siteInformationApi {
+module.exports = class SiteInformationApi {
 
     static async fetchTopologyAsync(req, res) {
         try  {
