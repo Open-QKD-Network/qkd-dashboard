@@ -27,7 +27,7 @@ module.exports = class WebsocketControllers{
         })
 
 
-        httpserver.listen(process.env.PORT, () => console.log(`SERVER IS LISTENING ON 'ws://${process.env.ADDRESS}:${process.env.PORT}/api/v1'`));
+        httpserver.listen(process.env.PORT_WS, () => console.log(`RUNNIG WS CONNECTION ON 'ws://${process.env.ADDRESS}:${process.env.PORT_WS}/api/v1'`));
 
         websocket.on("request", request => {
 

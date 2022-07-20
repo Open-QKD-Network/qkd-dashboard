@@ -15,7 +15,7 @@ module.exports = class TopologyControllers {
      */
     static getTopology() {
         try {
-            return JSON.stringify(new topology.Topology({"current": this.getCurrentInfo(), "neighbours": this.getNeigbourInfo()}));
+            return new topology.Topology({"current": this.getCurrentInfo(), "neighbours": this.getNeigbourInfo()});
         } catch (e) {
             console.log(e);
             throw new Error("ERROR WHEN CREATING TOPOLOGY");
