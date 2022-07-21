@@ -18,7 +18,7 @@ export default {
     data(){
         return {
             ipAddresses: [], // List of IP addresses.
-            siteIds: [] // List of sitIds.
+            names: [] // List of modal names.
         }
     },
     // Method Functions
@@ -32,7 +32,7 @@ export default {
             .then((jsonResponse) => {
                 for (var i in jsonResponse) {
                     this.ipAddresses.push(jsonResponse[i].ip);
-                    this.ipAddresses.push(jsonResponse[i].siteId);
+                    this.names.push(jsonResponse[i].ip.replace(/./g, ''));
                 }
             });
     }
