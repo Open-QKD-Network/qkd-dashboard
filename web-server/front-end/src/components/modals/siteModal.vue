@@ -1,10 +1,10 @@
 <template>
     <!-- Modal -->
-    <div v-for="(item, index) in siteIds" :key="item" class="modal fade" id="{{ index }}" tabindex="-1">
+    <div v-for="(ip, index) in ipAddresses" :key="ip" class="modal fade" :id="'ip' + names[index]" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title"> {{item}} - {{ipAddresses[index]}}</h5>
+                <h5 class="modal-title"> {{ipAddresses[index]}}</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -28,7 +28,7 @@ export default {
     data(){
         return {
             ipAddresses: [], // List of IP addresses.
-            siteIds: [] // List of sitIds.
+            names: [] // List of sitIds.
         }
     },
     // Method Functions
@@ -42,7 +42,7 @@ export default {
             .then((jsonResponse) => {
                 for (var i in jsonResponse) {
                     this.ipAddresses.push(jsonResponse[i].ip);
-                    this.ipAddresses.push(jsonResponse[i].siteId);
+                    this.names.push(jsonResponse[i].ip.replace(/./g, ''));
                 }
             });
         

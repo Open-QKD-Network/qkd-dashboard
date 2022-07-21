@@ -2,7 +2,7 @@
     <div class="container">
         <div class="list-group" style="overflow-y: auto; height: 400px;" >
             <button data-bs-toggle="modal" data-bs-target="#t" class="list-group-item">tst</button>
-            <button v-for="(ip, index) in ipAddresses" :key="ip" class="list-group-item" data-bs-toggle="modal" data-bs-target="{{ siteIds[index] }}">{{ siteIds[index] }} - {{ ip }}</button>
+            <button v-for="(ip, index) in ipAddresses" :key="ip" class="list-group-item" data-bs-toggle="modal" :data-bs-target="names[index]">{{ ip }}</button>
         </div>
     </div>
 </template>
