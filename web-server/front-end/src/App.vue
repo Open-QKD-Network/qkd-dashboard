@@ -1,5 +1,5 @@
 <template>
-  <Cards75_25 title="QKD Network Topology" tab1="topology" tab2="sites"/>
+  <Cards75_25 title1="QKD Network Topology" title2="IP Information" tab1="topology" tab2="sites"/>
   <!-- <CardClass title="QKD Network Map" tab="network-map"/> -->
 </template>
 

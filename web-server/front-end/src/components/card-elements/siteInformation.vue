@@ -1,7 +1,7 @@
 <template>
-    <div class="container" style="">
-        <div class="list-group" style="overflow: scroll; max-height: 300px;" >
-            <button v-for="ip in ipAddresses" :key="ip" class="list-group-item">{{ip}}</button>
+    <div class="container">
+        <div class="list-group" style="overflow-y: auto; height: 400px;" >
+            <button v-for="ip in ipAddresses" :key="ip" class="list-group-item">{{ ip }}</button>
         </div>
     </div>
 </template>
@@ -25,7 +25,7 @@ export default {
     }, 
 
     async mounted() {
-        await fetch("http://localhost:5000/api/v1/ipInfo/fetch")
+        await fetch("http://localhost:8001/api/v1/ipInfo/fetch")
             .then(response => response.json())
             .then((jsonResponse) => {
                 for (var i in jsonResponse) {

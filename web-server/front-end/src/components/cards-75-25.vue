@@ -4,7 +4,7 @@
             <div class="col-9"> 
                 <div class="card mb-3">
                     <div class="card-header text-bg-primary">
-                    {{ title }}
+                    {{ title1 }}
                     </div>
                     <div class="card-body">
                         <div class="row">
@@ -19,7 +19,7 @@
             <div class="col-3"> 
                 <div class="card mb-3">
                     <div class="card-header text-bg-primary">
-                    {{ title }}
+                    {{ title2 }}
                     </div>
                     <div class="card-body">
                         <div class="row">
@@ -45,7 +45,8 @@ export default {
    * Dependancy variables (variables you need to provide).
    */
   props: {
-    title: String,
+    title1: String,
+    title2: String,
     tab1: String,
     tab2: String
    },
