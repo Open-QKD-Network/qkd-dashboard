@@ -14,10 +14,10 @@ module.exports = class KeyProduction {
 
         var neighboursJson = topology.getNeigbourInfo();
         this.siteId = topology.getCurrentInfo().siteId;
-        this.siteKeyJson = [];
+        this.siteKeyJson = {};
 
         for (var i in neighboursJson) {
-            this.siteKeyJson.push({[neighboursJson[i].siteId] : [getKeyCount(neighboursJson[i].siteId)]});
+            this.siteKeyJson[neighboursJson[i].siteId] = this.getKeyCount(neighboursJson[i].siteId);
         }
     }
 
