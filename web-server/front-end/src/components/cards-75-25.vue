@@ -1,6 +1,6 @@
 <template>
-    <div class="container"> 
-        <div class="row mw-100">
+    <div class="container-fluid"> 
+        <div class="row">
             <div class="col-9"> 
                 <div class="card mb-3">
                     <div class="card-header text-bg-primary">
