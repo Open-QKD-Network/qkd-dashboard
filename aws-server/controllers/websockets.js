@@ -12,7 +12,7 @@ const WebsocketCalls = require("../../constants/websocketCalls").WebsocketCalls;
 module.exports = class WebsocketControllers {
 
     constructor () {
-        this.connection = null;
+        this.connections = [];
         this.createWebSocket();
         this.keyProductionClass = new KeyProduction;
     }
@@ -35,10 +35,13 @@ module.exports = class WebsocketControllers {
 
         websocket.on("request", request => {
 
-            this.connection = request.accept(null, request.origin);
-            this.connection.on("open", () => console.log("OPENED CONNECTION ON ORIGIN: " + request.origin));
-            this.connection.on("close", () => console.log("CLOSED CONNECTION ON ORIGIN: " + request.origin));
-            this.connection.on("message", message => {
+            var connection = request.accept(null, request.origin);
+            connection.on("open", () => console.log("OPENED CONNECTION ON ORIGIN: " + request.origin));
+            connection.on("close", () => {
+                this.connections.splice(this.connections.indexOf(connection), 1);
+                console.log("CLOSED CONNECTION ON ORIGIN: " + request.origin);
+            });
+            connection.on("message", message => {
                 switch(message.utf8Data) {
                     /**
                      * In this case, we will send back the keyCount of the local machine by invoking
@@ -46,7 +49,7 @@ module.exports = class WebsocketControllers {
                      */
                     case WebsocketCalls.keyCount:
                         try {
-                            this.connection.send(JSON.stringify(KeyProduction.getKeyCount()));
+                            connection.send(JSON.stringify(KeyProduction.getKeyCount()));
                         } catch (e) {
                             console.log(e);
                         }
@@ -56,6 +59,7 @@ module.exports = class WebsocketControllers {
                 };
                 
             });
+            this.connections.push(connection);
         });
 
     }
@@ -67,6 +71,8 @@ module.exports = class WebsocketControllers {
     sendKeyRate = function(time) {
         var keyRates = this.keyProductionClass.calculateKeyRate(time);
         var keyCounts = this.keyProductionClass.calculateKeyCount();
-        this.connection.send(JSON.stringify({keyRates: [keyRates], keyCounts: [keyCounts]}));
+        for (var i in this.connections) {
+            this.connections[i].send(JSON.stringify({keyRates: [keyRates], keyCounts: [keyCounts]}));
+        }
     }
 }

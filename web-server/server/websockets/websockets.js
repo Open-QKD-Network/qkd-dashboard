@@ -1,6 +1,7 @@
 // IMPORTS.
 const { json } = require("express");
 const http = require("http");
+const { connections } = require("mongoose");
 const WebSocketServer = require("websocket").server
 const WebSocketClient = require("ws")
 const WebsocketCalls = require("../../../constants/websocketCalls").WebsocketCalls;
@@ -17,7 +18,7 @@ module.exports = class websocketControllers{
     constructor () {
         this.ipAddresses = [];
         this.websocketChannels = {};
-        this.connection = null;
+        this.connections = [];
         this.crearteIpAdresses();
         this.createWebSocket();
     }
@@ -41,10 +42,13 @@ module.exports = class websocketControllers{
          */
         websocket.on("request", request => {
     
-            this.connection = request.accept(null, request.origin);
-            this.connection.on("open", () => console.log("OPENED CONNECTION ON ORIGIN: " + request.origin));
-            this.connection.on("close", () => console.log("CLOSED CONNECTION ON ORIGIN: " + request.origin));
-            this.connection.on("message", message => {
+            var connection = request.accept(null, request.origin);
+            connection.on("open", () => console.log("OPENED CONNECTION ON ORIGIN: " + request.origin));
+            connection.on("close", () => {
+                this.connections.splice(this.connections.indexOf(connection), 1);
+                console.log("CLOSED CONNECTION ON ORIGIN: " + request.origin)
+            });
+            connection.on("message", message => {
                 console.log("RECIEVED MESSAGE!");
                 switch(message.utf8Data) {
                     case  WebsocketCalls.ipCount: // Requested Topology.
@@ -53,7 +57,7 @@ module.exports = class websocketControllers{
                          * all with a topology message.
                          */
                         try {
-                            this.connection.send(JSON.stringify({length: this.ipAddresses.length}));
+                            connection.send(JSON.stringify({length: this.ipAddresses.length}));
                         } catch (e) {
                             console.log(e);
                         }
@@ -107,7 +111,10 @@ module.exports = class websocketControllers{
         }
 
         ws.onmessage = (message) => {
-            this.connection.send(JSON.stringify({[ip]: JSON.parse(message.data)}));
+            for (var i in this.connections) {
+                this.connections[i].send(JSON.stringify({[ip]: JSON.parse(message.data)}));
+            }
+            
         }
 
         this.websocketChannels[this.ipAddresses[index]] = ws;

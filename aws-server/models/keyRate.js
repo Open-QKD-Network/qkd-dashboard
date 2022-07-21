@@ -13,5 +13,5 @@
 }
 
 module.exports = {
-    Site: KeyRate
+    KeyCount: KeyRate
 }
