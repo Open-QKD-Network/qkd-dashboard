@@ -16,7 +16,11 @@ app.use(express.static("uploads"));
 app.use("/api/v1/siteInformation", require("./routes/siteInformationRoutes"));
 
 // Websocket Initilizer.
-websocket.topologyWebSocket();
+websocketController = new websocket();
 
+// HTTP API Initilizer.
 app.listen(port, () => console.log("RUNNING HTTP CONNECTION..."));
+
+// Websocket Logic
+setInterval(() => {websocketController.sendKeyRate(5)}, 5000);
 

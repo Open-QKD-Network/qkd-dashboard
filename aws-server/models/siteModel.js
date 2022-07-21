@@ -6,7 +6,7 @@
 class Site {
     constructor (siteData) {
         this.siteId = siteData.siteId;
-        this.ip = siteData.ip
+        this.ip = siteData.ip;
     }
 }
 

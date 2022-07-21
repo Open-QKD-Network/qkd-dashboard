@@ -6,7 +6,7 @@
 class Topology {
     constructor (topologyData) {
         this.current = topologyData.current;
-        this.neighbours = topologyData.neighbours
+        this.neighbours = topologyData.neighbours;
     }
 }
 

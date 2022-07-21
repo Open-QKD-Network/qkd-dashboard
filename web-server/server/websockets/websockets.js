@@ -58,14 +58,14 @@ module.exports = class websocketControllers{
                             console.log(e);
                         }
                         break;
-                    case  WebsocketCalls.topology: // Requested Topology.
+                    case  WebsocketCalls.keyCount: // Requested Topology.
                         /**
                          * In this case, we loop through all IP addresses and send a request to 
                          * all with a topology message.
                          */
                         try {
                             for (var ip in this.websocketChannels) {
-                                this.websocketChannels[ip].send(WebsocketCalls.topology);
+                                this.websocketChannels[ip].send(WebsocketCalls.keyCount);
                             }
                         } catch (e) {
                             console.log(e);
@@ -99,14 +99,15 @@ module.exports = class websocketControllers{
      * Creates websocket client on backend for all IP addresses.
      */
     crearteWebsocketChannels = function(index) {
+        var ip = this.ipAddresses[index];
         var ws = new WebSocketClient(`ws://${this.ipAddresses[index]}:7070/api/v1`);
         ws.onerror = (e) => {
-            console.log(`ERROR AT ${this.ipAddresses[index]}: ${e.message}`);
+            console.log(`ERROR AT ${ip}: ${e.message}`);
             this.ipAddresses.splice(index, 1);
         }
 
         ws.onmessage = (message) => {
-            this.connection.send(JSON.stringify({topology : JSON.parse(message.data)}));
+            this.connection.send(JSON.stringify({[ip]: JSON.parse(message.data)}));
         }
 
         this.websocketChannels[this.ipAddresses[index]] = ws;
