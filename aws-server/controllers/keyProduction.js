@@ -41,7 +41,7 @@ module.exports = class KeyProduction {
             var currentKeyCount = this.getKeyCount(neigbourId);
             var rate = (currentKeyCount - this.siteKeyJson[neigbourId]) / time;
             this.siteKeyJson[neigbourId] = currentKeyCount;
-            neighborKeyRates.push(new KeyRate({siteId: [this.siteId], neigbourId: [neigbourId], rate: [rate]}));
+            neighborKeyRates.push(new KeyRate.KeyRate({siteId: [this.siteId], neigbourId: [neigbourId], rate: [rate]}));
         }
         return neighborKeyRates;
     }
@@ -54,7 +54,7 @@ module.exports = class KeyProduction {
     calculateKeyCount = function () {
         var neighborKeyCount = [];
         for (var neigbourId in this.siteKeyJson) {
-            neighborKeyCount.push(new KeyCount({siteId: [this.siteId], neigbourId: [neigbourId], count: [this.getKeyCount(neigbourId)]}));
+            neighborKeyCount.push(new KeyCount.KeyCount({siteId: [this.siteId], neigbourId: [neigbourId], count: [this.getKeyCount(neigbourId)]}));
         }
         return neighborKeyCount;
     }

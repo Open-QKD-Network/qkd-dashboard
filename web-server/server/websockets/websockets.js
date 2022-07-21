@@ -81,6 +81,7 @@ module.exports = class websocketControllers{
                 }
 
             });
+            this.connections.push(connection);
         });
     
     }
