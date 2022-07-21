@@ -1,7 +1,8 @@
 <template>
     <div class="container">
         <div class="list-group" style="overflow-y: auto; height: 400px;" >
-            <button v-for="ip in ipAddresses" :key="ip" class="list-group-item">{{ ip }}</button>
+            <button data-bs-toggle="modal" data-bs-target="#t" class="list-group-item">tst</button>
+            <button v-for="(ip, index) in ipAddresses" :key="ip" class="list-group-item" data-bs-toggle="modal" data-bs-target="{{ siteIds[index] }}">{{ siteIds[index] }} - {{ ip }}</button>
         </div>
     </div>
 </template>
@@ -16,7 +17,8 @@ export default {
      */
     data(){
         return {
-            ipAddresses: [] // List of topology JSON objects.
+            ipAddresses: [], // List of IP addresses.
+            siteIds: [] // List of sitIds.
         }
     },
     // Method Functions
@@ -30,6 +32,7 @@ export default {
             .then((jsonResponse) => {
                 for (var i in jsonResponse) {
                     this.ipAddresses.push(jsonResponse[i].ip);
+                    this.ipAddresses.push(jsonResponse[i].siteId);
                 }
             });
     }
