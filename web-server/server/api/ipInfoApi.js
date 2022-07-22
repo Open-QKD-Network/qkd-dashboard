@@ -58,7 +58,7 @@ module.exports = class IpInfoApi {
     static async createIpInfoAsync(req, res) {  
         try  {
             const newIpInfo = req.body;
-            await location.create(newIpInfo);
+            await ipInfo.create(newIpInfo);
 
             res.status(201).json({message: "Post Created Succesfully"});
         } catch (err) {

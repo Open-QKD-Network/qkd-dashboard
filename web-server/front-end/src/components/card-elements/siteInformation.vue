@@ -31,7 +31,7 @@ export default {
             .then((jsonResponse) => {
                 for (var i in jsonResponse) {
                     this.ipAddresses.push(jsonResponse[i].ip);
-                    this.names.push(jsonResponse[i].ip.replace(/./g, ''));
+                    this.names.push(jsonResponse[i].ip.replace(/\./g, ''));
                 }
             });
     }
