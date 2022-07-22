@@ -8,6 +8,7 @@
 
 <script>
 import fetch from 'node-fetch';
+import Constants from "../../config.js";
 
 
 export default {
@@ -69,7 +70,7 @@ export default {
     }, 
 
     async mounted() {
-        await fetch("http://localhost:8001/api/v1/sites/fetch")
+        await fetch(`http://${Constants.PUBLIC_IP}:8001/api/v1/sites/fetch`)
             .then(response => response.json())
             .then((jsonResponse) => {
                 this.topologies = jsonResponse;
@@ -78,5 +79,4 @@ export default {
     }
 }
 </script>
-
 

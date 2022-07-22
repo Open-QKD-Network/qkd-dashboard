@@ -4,7 +4,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title"> {{ipAddresses[index]}}</h5>
+                <h5 class="modal-title"> {{  ipAddresses[index]  }}</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -34,6 +34,7 @@
 </template>
 
 <script>
+import Constants from "../../config.js";
 
 export default {
     name: 'SiteModal',
@@ -53,7 +54,7 @@ export default {
     }, 
 
     async mounted() {
-        await fetch("http://localhost:8001/api/v1/ipInfo/fetch")
+        await fetch(`http://${Constants.PUBLIC_IP}:8001/api/v1/ipInfo/fetch`)
             .then(response => response.json())
             .then((jsonResponse) => {
                 for (var i in jsonResponse) {
@@ -62,9 +63,14 @@ export default {
                 }
             });
         
-            var ws = new WebSocket("ws://localhost:8002");
+            var ws = new WebSocket("ws://10.0.0.146:8002");
             ws.onmessage = (message) => {
-                this.keyInformation = JSON.parse(message.data);
+                var data = JSON.parse(message.data);
+                for (var i in data) {
+                    this.keyInformation[i] = data[i];
+                }
+                
+                console.log(this.keyInformation);
             }
 
             ws.onerror = (err) => {

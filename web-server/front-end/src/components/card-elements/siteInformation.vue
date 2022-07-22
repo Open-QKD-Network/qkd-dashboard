@@ -7,7 +7,8 @@
 </template>
 
 <script>
- 
+import Constants from "../../config.js";
+
 
 export default {
     name: 'SiteInformationClass',
@@ -26,7 +27,7 @@ export default {
     }, 
 
     async mounted() {
-        await fetch("http://localhost:8001/api/v1/ipInfo/fetch")
+        await fetch(`http://${Constants.PUBLIC_IP}:8001/api/v1/ipInfo/fetch`)
             .then(response => response.json())
             .then((jsonResponse) => {
                 for (var i in jsonResponse) {
