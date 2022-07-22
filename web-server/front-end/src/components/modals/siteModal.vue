@@ -8,7 +8,22 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                ...
+                <table class="table">
+                    <thead>
+                        <tr>
+                        <th scope="col">Site</th>
+                        <th scope="col">Key Count</th>
+                        <th scope="col">Key Rate</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="(rates, index2) in keyInformation[ip].keyRates" :key="rates">
+                            <td>{{  rates.neigbourId  }}</td>
+                            <td>{{  keyInformation[ip].keyCounts[index2].count  }}</td>
+                            <td>{{  rates.rate  }}</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
