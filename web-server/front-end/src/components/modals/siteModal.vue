@@ -28,7 +28,8 @@ export default {
     data(){
         return {
             ipAddresses: [], // List of IP addresses.
-            names: [] // List of sitIds.
+            names: [], // List of sitIds.
+            keyInformation: {}
         }
     },
     // Method Functions
@@ -49,7 +50,8 @@ export default {
         try {
             var ws = new WebSocket("ws://localhost:8002");
             ws.onmessage = (message) => {
-                console.log(message);
+                this.keyInformation = JSON.parse(message.data);
+                console.log(this.keyInformation);
             }
 
         } catch (e) {
