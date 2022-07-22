@@ -1,6 +1,6 @@
 <template>
     <div  class="container">
-        <div class="row align-items-center">
+        <div class="row align-items-center" id="topologyDiv">
             <div class="d-flex justify-content-center" id="topologyCanvas"></div>
         </div>
     </div>
@@ -38,6 +38,8 @@ export default {
             //     fill: '#ff0000',
             // };
 
+            var width = document.getElementById("topologyDiv").clientWidth - 20;
+
             var Dracula = require('graphdracula');
             var Graph = Dracula.Graph;
             var Renderer = Dracula.Renderer.Raphael;
@@ -61,7 +63,7 @@ export default {
             
             var layout = new Layout(graph);
             layout.layout();
-            var renderer = new Renderer('#topologyCanvas', graph, 1000, 400);
+            var renderer = new Renderer('#topologyCanvas', graph, width, 400);
             renderer.draw();
         }
     }, 
