@@ -11,10 +11,7 @@ const mongoose = require("mongoose");
  */
 const ipInfoSchema = mongoose.Schema({
     ip: String,
-    locaion: {
-        type: mongoose.Schema.Types.Mixed,
-        ref: 'location'
-        },
+    locaionId: String
 });
 
 module.exports = mongoose.model("ipInfo", ipInfoSchema);

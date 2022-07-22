@@ -57,7 +57,7 @@ module.exports = class LocationApi {
      */
     static async createLocationAsync(req, res) {
         const newLocation = req.body;  
-        console.log(newLocation);
+
         try  {
             await location.create(newLocation);
             res.status(201).json({message: "Post Created Succesfully"});
