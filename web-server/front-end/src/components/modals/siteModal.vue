@@ -63,7 +63,7 @@ export default {
                 }
             });
         
-            var ws = new WebSocket("ws://10.0.0.146:8002");
+            var ws = new WebSocket(`ws://${Constants.PUBLIC_IP}:8002`);
             ws.onmessage = (message) => {
                 var data = JSON.parse(message.data);
                 for (var i in data) {
