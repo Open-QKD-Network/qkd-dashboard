@@ -8,12 +8,12 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <table class="table">
+                <table class="table text-center" style="overflow-y: auto;">
                     <thead>
                         <tr>
-                        <th scope="col">Site</th>
-                        <th scope="col">Key Count</th>
-                        <th scope="col">Key Rate</th>
+                            <th scope="col">Site</th>
+                            <th scope="col">Key Count</th>
+                            <th scope="col">Key Rate</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -43,8 +43,8 @@ export default {
     data(){
         return {
             ipAddresses: [], // List of IP addresses.
-            names: [], // List of sitIds.
-            keyInformation: {}
+            names: [], // List of IP addresses without the '.'.
+            keyInformation: {} // Updated key information.
         }
     },
     // Method Functions
@@ -62,16 +62,16 @@ export default {
                 }
             });
         
-        try {
             var ws = new WebSocket("ws://localhost:8002");
             ws.onmessage = (message) => {
                 this.keyInformation = JSON.parse(message.data);
-                console.log(this.keyInformation);
             }
 
-        } catch (e) {
-            console.log("ERROR ON WS CONNECTION.")
-        }
+            ws.onerror = (err) => {
+                console.log("ERROR ON WS CONNECTION: " + err);
+
+            }
+
     }
 }
 </script>
