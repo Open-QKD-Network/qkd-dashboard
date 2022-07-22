@@ -7,7 +7,7 @@
  class KeyCount {
     constructor (siteData) {
         this.siteId = siteData.siteId;
-        this.ip = siteData.ip;
+        this.neigbourId = siteData.neigbourId;
         this.count = siteData.count;
     }
 }

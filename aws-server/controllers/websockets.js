@@ -72,7 +72,7 @@ module.exports = class WebsocketControllers {
         var keyRates = this.keyProductionClass.calculateKeyRate(time);
         var keyCounts = this.keyProductionClass.calculateKeyCount();
         for (var i in this.connections) {
-            this.connections[i].send(JSON.stringify({keyRates: [keyRates], keyCounts: [keyCounts]}));
+            this.connections[i].send(JSON.stringify({keyRates: keyRates, keyCounts: keyCounts}));
         }
     }
 }
