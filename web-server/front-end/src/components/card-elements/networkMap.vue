@@ -18,25 +18,34 @@ export default {
             ipValues: [], // IP values.
             topologies: [], // List of topology JSON objects.
             locations: [], // List of location JSON objects.
-            dataLineStruct: { // Structure of lines map.
+            dataLineStruct: { // Structure of lines map.        
                 type: 'scattergeo',
                 lat: [],
                 lon: [],
-                mode: 'lines',
+                mode: 'lines', 
+                hoverinfo: "skip",
                 line:{
-                    width: 2,
+                    width: 3,
                     color: 'green'
                 },
+                marker : {
+                    colorbar: {
+                    bordercolor: 'rgb(0, 0, 0)',
+                    }
+                }  
             },
-            dataPointStruct: { // Structure of points on map
+            dataPointStruct: { // Structure of points on map                
                 type: 'scattergeo',
                 lat: [],
                 lon: [],
-                mode: 'point',
-                line:{
-                    width: 2,
-                    color: 'black'
-                }
+                mode: 'markers',
+                hoverinfo: 'name',
+                name: '',
+                marker : {
+                    color: "#000000",
+                    cmin: 500,
+                    cmax: 1000
+                }  
             }
         }
     },
@@ -61,10 +70,13 @@ export default {
                                 locationInfo.lon = parseFloat(this.locations[j].longitude);
                                 locationInfo.lat = parseFloat(this.locations[j].latitude);
                                 
-                                var tmpDataPointStruct = this.dataPointStruct;
-                                tmpDataPointStruct.lat.push(locationInfo.lon);
-                                tmpDataPointStruct.lon.push(locationInfo.lat);
-
+                                console.log(this.dataPointStruct);
+                                var tmpDataPointStruct = JSON.parse(JSON.stringify(this.dataPointStruct));
+                                tmpDataPointStruct.lon.push(locationInfo.lon);
+                                tmpDataPointStruct.lat.push(locationInfo.lat);
+                                console.log(this.locations[j].city);
+                                tmpDataPointStruct["name"] = this.locations[j].city
+                                
                                 data.push(tmpDataPointStruct);
 
                                 break;
@@ -78,7 +90,6 @@ export default {
                 for (var j in neighbours) {
                     var neighbourIp = neighbours[j].ip;
                     var neighbourInfo = {}
-                    console.log(localIp + " - " + neighbourIp);
 
                     await fetch(`http://${Constants.PUBLIC_IP}:8001/api/v1/ipInfo/fetch/ip/${neighbourIp}`)
                         .then(response => response.json())
@@ -89,9 +100,9 @@ export default {
                                     neighbourInfo.lon = parseFloat(this.locations[k].longitude);
                                     neighbourInfo.lat = parseFloat(this.locations[k].latitude);
 
-                                    var tmpDataLineStruct = this.dataLineStruct;
-                                    tmpDataLineStruct.lat = [neighbourInfo.lon, locationInfo.lon];
-                                    tmpDataLineStruct.lon = [neighbourInfo.lat, locationInfo.lat];
+                                    var tmpDataLineStruct = JSON.parse(JSON.stringify(this.dataLineStruct));
+                                    tmpDataLineStruct.lat = [neighbourInfo.lat, locationInfo.lat];
+                                    tmpDataLineStruct.lon = [neighbourInfo.lon, locationInfo.lon];
                                     data.push(tmpDataLineStruct);
 
                                     break;
@@ -108,14 +119,19 @@ export default {
             console.log(data);
 
             var layout = {
-            showlegend: false,
-            geo: {
-                resolution: 20,
+                showlegend: false,
+                margin: { r: 0, t: 0, b: 0, l: 0 },
+                geo: {
+                resolution: 30,
                 showland: true,
                 showlakes: true,
+                showocean: true,
+                showcountries: true,
+                subunitcolor:"Blue",
                 landcolor: 'rgb(204, 204, 204)',
-                countrycolor: 'rgb(204, 204, 204)',
-                lakecolor: 'rgb(255, 255, 255)',
+                countrycolor: 'black',
+                lakecolor: '#1da2d8',
+                oceancolor: '#1da2d8',
                 projection: {
                     type: 'equirectangular'
                 },
