@@ -55,7 +55,7 @@ export default {
                 await fetch(`http://${Constants.PUBLIC_IP}:8001/api/v1/ipInfo/fetch/ip/${localIp}`)
                     .then(response => response.json())
                     .then((jsonResponse) => {
-                        var locationId = jsonResponse.locaionId;
+                        var locationId = jsonResponse.locationId;
                         for (var j in this.locations) {
                             if (this.locations[j]._id == locationId) {
                                 locationInfo.lon = parseFloat(this.locations[j].longitude);
@@ -83,7 +83,7 @@ export default {
                     await fetch(`http://${Constants.PUBLIC_IP}:8001/api/v1/ipInfo/fetch/ip/${neighbourIp}`)
                         .then(response => response.json())
                         .then((jsonResponse) => {
-                            var locationId = jsonResponse.locaionId;
+                            var locationId = jsonResponse.locationId;
                             for (var k in this.locations) {
                                 if (locationId == this.locations[k]._id) {
                                     neighbourInfo.lon = parseFloat(this.locations[k].longitude);
