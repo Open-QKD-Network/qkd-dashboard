@@ -70,7 +70,6 @@ export default {
                     this.keyInformation[i] = data[i];
                 }
                 
-                console.log(this.keyInformation);
             }
 
             ws.onerror = (err) => {

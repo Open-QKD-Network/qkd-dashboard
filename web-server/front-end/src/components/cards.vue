@@ -7,7 +7,7 @@
       <div>
         <!-- Type of tab to add-->
         <div v-if="tab == 'topology'"><TopologyClass /></div>
-        <!-- <h1 v-if="tab == 'network-map'">MAP</h1> -->
+        <div v-if="tab == 'network-map'"><NetworkMap /></div>
       </div>
     </div>
   </div>
@@ -15,6 +15,7 @@
 
 <script>
 import TopologyClass from './card-elements/topology.vue'
+import NetworkMap from './card-elements/networkMap.vue'
 
 export default {
   name: 'CardClass',
@@ -29,7 +30,8 @@ export default {
     * Used Components.
     */
    components: {
-    TopologyClass
+    TopologyClass,
+    NetworkMap
    }
 }
 </script>
