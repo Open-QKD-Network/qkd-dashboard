@@ -66,8 +66,8 @@ export default {
         
             var ws = new WebSocket(`ws://${Constants.PUBLIC_IP}:8002`);
             ws.onopen = () => {
-                console.log("OPENED")
-                ws.send(WebSocketConstants.keyInfo);
+                console.log("OPENED " + WebSocketConstants.WebsocketCalls.keyInfo)
+                ws.send(WebSocketConstants.WebsocketCalls.keyInfo);
             }
             ws.onmessage = (message) => {
                 var data = JSON.parse(message.data);
