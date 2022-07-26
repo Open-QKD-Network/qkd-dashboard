@@ -35,6 +35,7 @@
 
 <script>
 import Constants from "../../config.js";
+import WebSocketConstants from "../../../../../constants/websocketCalls";
 
 export default {
     name: 'SiteModal',
@@ -64,6 +65,10 @@ export default {
             });
         
             var ws = new WebSocket(`ws://${Constants.PUBLIC_IP}:8002`);
+            ws.onopen = () => {
+                console.log("OPENED")
+                ws.send(WebSocketConstants.keyInfo);
+            }
             ws.onmessage = (message) => {
                 var data = JSON.parse(message.data);
                 for (var i in data) {

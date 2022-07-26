@@ -14,7 +14,11 @@ module.exports = class SitesApi {
             const ipInfos = await ipInfo.find().exec(async function(err, ipJson) {
                 for (var i in ipJson) {
                     var ip = ipJson[i].ip;
-                    topologies.push(await topology.getTopologyAsync(ip));
+                    try {
+                        topologies.push(await topology.getTopologyAsync(ip));
+                    } catch (e) {
+                        console.log("ERROR ON FETCHING SITE FOR " + ip)
+                    }
                 }
                 res.status(200).json(topologies);
             });

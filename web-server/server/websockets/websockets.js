@@ -1,7 +1,6 @@
 // IMPORTS.
 const { json } = require("express");
 const http = require("http");
-const { connections } = require("mongoose");
 const WebSocketServer = require("websocket").server
 const WebSocketClient = require("ws")
 const WebsocketCalls = require("../../../constants/websocketCalls").WebsocketCalls;
@@ -49,7 +48,6 @@ module.exports = class websocketControllers{
                 console.log("CLOSED CONNECTION ON ORIGIN: " + request.origin)
             });
             connection.on("message", message => {
-                console.log("RECIEVED MESSAGE!");
                 switch(message.utf8Data) {
                     case  WebsocketCalls.ipCount: // Requested Topology.
                         /**
@@ -62,17 +60,17 @@ module.exports = class websocketControllers{
                             console.log(e);
                         }
                         break;
-                    case  WebsocketCalls.keyCount: // Requested Topology.
+                    case  WebsocketCalls.keyInfo: // Requested Topology.
                         /**
                          * In this case, we loop through all IP addresses and send a request to 
                          * all with a topology message.
                          */
                         try {
                             for (var ip in this.websocketChannels) {
-                                this.websocketChannels[ip].send(WebsocketCalls.keyCount);
+                                this.websocketChannels[ip].send(WebsocketCalls.keyInfo);
                             }
                         } catch (e) {
-                            console.log(e);
+                            console.error(e);
                         }
                         break;
                         
@@ -113,7 +111,11 @@ module.exports = class websocketControllers{
 
         ws.onmessage = (message) => {
             for (var i in this.connections) {
-                this.connections[i].send(JSON.stringify({[ip]: JSON.parse(message.data)}));
+                try {
+                    this.connections[i].send(JSON.stringify({[ip]: JSON.parse(message.data)}));
+                } catch (e) {
+                    console.error("ERROR ON SENDING WEBSOCKET MESSAGE.")
+                }
             }
             
         }

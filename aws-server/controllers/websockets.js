@@ -47,11 +47,11 @@ module.exports = class WebsocketControllers {
                      * In this case, we will send back the keyCount of the local machine by invoking
                      * getKeyCount().
                      */
-                    case WebsocketCalls.keyCount:
+                    case WebsocketCalls.keyInfo:
                         try {
-                            connection.send(JSON.stringify(KeyProduction.getKeyCount()));
+                            this.sendKeyInfo(1);
                         } catch (e) {
-                            console.log(e);
+                            console.error(e);
                         }
                         break;
                     default:
@@ -65,10 +65,10 @@ module.exports = class WebsocketControllers {
     }
     
     /**
-     * 
-     * @param {Int} time time between calls, in seconds.
+     * Sends Key information through websocket connection.
+     * @param {Int} time Time between calls, in seconds.
      */
-    sendKeyRate = function(time) {
+    sendKeyInfo = function(time) {
         var keyRates = this.keyProductionClass.calculateKeyRate(time);
         var keyCounts = this.keyProductionClass.calculateKeyCount();
         for (var i in this.connections) {

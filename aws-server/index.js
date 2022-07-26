@@ -22,5 +22,8 @@ websocketController = new websocket();
 app.listen(port, () => console.log("RUNNING HTTP CONNECTION..."));
 
 // Websocket Logic
-setInterval(() => {websocketController.sendKeyRate(5)}, 5000);
-
+try {
+setInterval(() => {websocketController.sendKeyRate(10)}, 10000);
+} catch (e) {
+    console.error(e);
+}
