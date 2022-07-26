@@ -23,7 +23,7 @@ app.listen(port, () => console.log("RUNNING HTTP CONNECTION..."));
 
 // Websocket Logic
 try {
-setInterval(() => {websocketController.sendKeyRate(10)}, 10000);
+    setInterval(() => {websocketController.sendKeyInfo(10)}, 10000);
 } catch (e) {
     console.error(e);
 }
