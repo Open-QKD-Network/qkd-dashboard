@@ -70,9 +70,13 @@ export default {
             }
             ws.onmessage = (message) => {
                 var data = JSON.parse(message.data);
-                console.log(data);
                 for (var i in data) {
-                    this.keyInformation[i] = data[i];
+                    if (data[i].KeyInfo != undefined) {
+                        this.keyInformation[i] = data[i].KeyInfo;
+                        console.log(this.keyInformation[i]);
+
+
+                    }
                 }
                 
             }
