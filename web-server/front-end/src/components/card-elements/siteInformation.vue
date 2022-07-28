@@ -35,7 +35,6 @@ export default {
                 for (var i in jsonResponse) {
                     this.ipSitePair[jsonResponse[i].current.siteId] =  jsonResponse[i].current.ip;
                     this.siteIds.push(jsonResponse[i].current.siteId);
-                    this.names.push(jsonResponse[i].current.ip.replace(/\./g, ''));
                 }
                 this.siteIds.sort();
                 console.log(this.ipSitePair);
@@ -43,6 +42,8 @@ export default {
                 for (var j in this.siteIds) {
                     console.log(this.ipSitePair[this.siteIds[j]]);
                     this.ipAddresses.push(this.ipSitePair[this.siteIds[j]]);
+                    this.names.push(this.ipAddresses[j].replace(/\./g, ''));
+
                 }
                 console.log(this.ipAddresses);
             });
