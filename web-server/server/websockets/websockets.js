@@ -51,8 +51,7 @@ module.exports = class websocketControllers{
                 switch(message.utf8Data) {
                     case  WebsocketCalls.ipCount: // Requested Topology.
                         /**
-                         * In this case, we loop through all IP addresses and send a request to 
-                         * all with a topology message.
+                         * In this case, we Send the number of available IP addresses.
                          */
                         try {
                             connection.send(JSON.stringify({length: this.ipAddresses.length}));
@@ -60,10 +59,10 @@ module.exports = class websocketControllers{
                             console.log(e);
                         }
                         break;
-                    case  WebsocketCalls.keyInfo: // Requested Topology.
+                    case  WebsocketCalls.keyInfo: // Requested KeyInfo.
                         /**
-                         * In this case, we loop through all IP addresses and send a request to 
-                         * all with a topology message.
+                         * In this case, we loop through all websocket channels and send a Key Info
+                         * request.
                          */
                         try {
                             for (var ip in this.websocketChannels) {
@@ -73,7 +72,21 @@ module.exports = class websocketControllers{
                             console.error(e);
                         }
                         break;
-                        
+                    
+                    case  WebsocketCalls.connectionStatus: // Requested Connection Status.
+                        /**
+                         * In this case, we loop through all websocket channels and send a connection
+                         * status request.
+                         */
+                        try {
+                            for (var ip in this.websocketChannels) {
+                                this.websocketChannels[ip].send(WebsocketCalls.connectionStatus);
+                            }
+                        } catch (e) {
+                            console.error(e);
+                        }
+                        break;
+                    
                     default :
                         console.log("INVALID MESSAGE DATA.");
                 }

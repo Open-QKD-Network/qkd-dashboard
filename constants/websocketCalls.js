@@ -4,7 +4,8 @@
 const WebsocketCalls = {
     keyInfo: "0",
     keyRate : "1",
-    ipCount : "2"
+    ipCount : "2",
+    connectionStatus: "3",
 }
 
 module.exports = {

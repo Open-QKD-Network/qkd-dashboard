@@ -52,12 +52,10 @@ export default {
                 var currentSiteId = this.topologies[i]["current"]["siteId"];
                 var currentIp = this.topologies[i]["current"]["ip"];
                 
-                console.log(`${currentSiteId} - ${currentIp}`);
                 var neighbours = this.topologies[i]["neighbours"]
                 for (var j in neighbours) {
                     var neigbourSiteId = neighbours[j]["siteId"];
                     var neigbourIp = neighbours[j]["ip"];
-                    console.log(`${neigbourSiteId} - ${neigbourIp}`);
                     graph.addEdge(`${currentSiteId} - ${currentIp}`, `${neigbourSiteId} - ${neigbourIp}`, {style: successStyle});
                 }
             }
@@ -68,7 +66,9 @@ export default {
             renderer.draw();
         }
     }, 
-
+    /**
+     * Mounted class once webpage is up. Fetches locations and sites from backend.
+     */
     async mounted() {
         await fetch(`http://${Constants.PUBLIC_IP}:8001/api/v1/sites/fetch`)
             .then(response => response.json())

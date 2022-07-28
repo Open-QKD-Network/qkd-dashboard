@@ -2,6 +2,7 @@
 const http = require("http");
 const WebSocketServer = require("websocket").server;
 const KeyProduction = require("./keyProduction");
+const Connection = require("./connections");
 require('dotenv').config()
 const WebsocketCalls = require("../../constants/websocketCalls").WebsocketCalls;
 
@@ -44,12 +45,22 @@ module.exports = class WebsocketControllers {
             connection.on("message", message => {
                 switch(message.utf8Data) {
                     /**
-                     * In this case, we will send back the keyCount of the local machine by invoking
-                     * getKeyCount().
+                     * In this case, we will send back the keyInfo of the local machine by invoking
+                     * sendKeyInfo().
                      */
                     case WebsocketCalls.keyInfo:
                         try {
                             this.sendKeyInfo(1);
+                        } catch (e) {
+                            console.error(e);
+                        }
+                        break;
+                     /**
+                     * In this case, we will send back the Connection status by invoking sendConenctionInfo().
+                     */
+                      case WebsocketCalls.keyInfo:
+                        try {
+                            this.sendConenctionInfo();
                         } catch (e) {
                             console.error(e);
                         }
@@ -72,7 +83,19 @@ module.exports = class WebsocketControllers {
         var keyRates = this.keyProductionClass.calculateKeyRate(time);
         var keyCounts = this.keyProductionClass.calculateKeyCount();
         for (var i in this.connections) {
-            this.connections[i].send(JSON.stringify({keyRates: keyRates, keyCounts: keyCounts}));
+            this.connections[i].send(JSON.stringify({KeyInfo : {keyRates: keyRates, keyCounts: keyCounts}}));
         }
     }
+
+    /**
+     * Sends Key information through websocket connection.
+     * @param {Int} time Time between calls, in seconds.
+     */
+     sendConenctionInfo = function() {
+        if (!Connection.checkIfFileExists) return;
+
+        for (var i in this.connections) {
+            this.connections[i].send(JSON.stringify({ConnectionInfo: Connection.findConnectionStatus()}));
+        }
+    }    
 }

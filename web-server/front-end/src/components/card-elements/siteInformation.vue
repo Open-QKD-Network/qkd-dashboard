@@ -17,7 +17,7 @@ export default {
      */
     data(){
         return {
-            ipSitePair: {},
+            ipSitePair: {}, // Dictionary of SiteIDs (keys) and IPs (values).
             ipAddresses: [], // List of IP addresses.
             siteIds: [], // List of siteIds.
             names: [] // List of modal names.
@@ -27,7 +27,9 @@ export default {
     methods: {
 
     }, 
-
+    /**
+     * Mounted class once webpage is up. Fetches sites from backend.
+     */
     async mounted() {
         await fetch(`http://${Constants.PUBLIC_IP}:8001/api/v1/sites/fetch`)
             .then(response => response.json())
@@ -37,15 +39,12 @@ export default {
                     this.siteIds.push(jsonResponse[i].current.siteId);
                 }
                 this.siteIds.sort();
-                console.log(this.ipSitePair);
-                console.log(this.siteIds);
+
                 for (var j in this.siteIds) {
-                    console.log(this.ipSitePair[this.siteIds[j]]);
                     this.ipAddresses.push(this.ipSitePair[this.siteIds[j]]);
                     this.names.push(this.ipAddresses[j].replace(/\./g, ''));
 
                 }
-                console.log(this.ipAddresses);
             });
     }
 }

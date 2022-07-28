@@ -22,9 +22,9 @@ module.exports = class KeyProduction {
     }
 
     /**
-     * 
-     * @param {String} neigbourId 
-     * @returns 
+     * Reads file destination and checks the number of keys.
+     * @param {String} neigbourId Neighbour site ID.
+     * @returns Number of keys for neighbout site.
      */
     getKeyCount = function (neigbourId) {
         return fs.readdirSync(`${this.dest}/${neigbourId}`).length - 1;

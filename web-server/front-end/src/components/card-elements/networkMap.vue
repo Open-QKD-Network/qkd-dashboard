@@ -70,11 +70,9 @@ export default {
                                 locationInfo.lon = parseFloat(this.locations[j].longitude);
                                 locationInfo.lat = parseFloat(this.locations[j].latitude);
                                 
-                                console.log(this.dataPointStruct);
                                 var tmpDataPointStruct = JSON.parse(JSON.stringify(this.dataPointStruct));
                                 tmpDataPointStruct.lon.push(locationInfo.lon);
                                 tmpDataPointStruct.lat.push(locationInfo.lat);
-                                console.log(this.locations[j].city);
                                 tmpDataPointStruct["name"] = this.locations[j].city
                                 
                                 data.push(tmpDataPointStruct);
@@ -155,6 +153,9 @@ export default {
         }
     }, 
 
+    /**
+     * Mounted class once webpage is up. Fetches locations and sites from backend.
+     */
     async mounted() {
         await fetch(`http://${Constants.PUBLIC_IP}:8001/api/v1/location/fetch`)
             .then(response => response.json())
