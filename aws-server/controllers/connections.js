@@ -16,7 +16,7 @@ module.exports = class Connection {
      */
     checkIfFileExists = function () {
         try {
-            return fs.existsSync(path);
+            return fs.existsSync(this.dest);
         } catch (e){
             console.error("ERROR ON FINDING lsrp.json: " + e)
         }
