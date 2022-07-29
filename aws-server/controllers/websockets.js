@@ -16,6 +16,7 @@ module.exports = class WebsocketControllers {
         this.connections = [];
         this.createWebSocket();
         this.keyProductionClass = new KeyProduction;
+        this.connectionClass = new Connection;
     }
 
     /**
@@ -92,10 +93,10 @@ module.exports = class WebsocketControllers {
      * @param {Int} time Time between calls, in seconds.
      */
      sendConenctionInfo = function() {
-        if (!Connection.checkIfFileExists) return;
-
+        if (!this.connectionClass.checkIfFileExists()) return;
+        
         for (var i in this.connections) {
-            this.connections[i].send(JSON.stringify({ConnectionInfo: Connection.findConnectionStatus()}));
+            this.connections[i].send(JSON.stringify({ConnectionInfo: this.connectionClass.findConnectionStatus()}));
         }
     }    
 }
