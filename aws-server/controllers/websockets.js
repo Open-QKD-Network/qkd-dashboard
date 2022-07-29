@@ -58,7 +58,7 @@ module.exports = class WebsocketControllers {
                      /**
                      * In this case, we will send back the Connection status by invoking sendConenctionInfo().
                      */
-                      case WebsocketCalls.keyInfo:
+                      case WebsocketCalls.connectionStatus:
                         try {
                             this.sendConenctionInfo();
                         } catch (e) {
