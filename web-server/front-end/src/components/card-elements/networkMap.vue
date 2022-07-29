@@ -6,6 +6,7 @@
 import fetch from 'node-fetch';
 import Plotly from'plotly.js-dist'
 import Constants from "../../config.js";
+import WebSocketConstants from "../../../../../constants/websocketCalls";
 
 
 export default {
@@ -18,6 +19,7 @@ export default {
             ipValues: [], // IP values.
             topologies: [], // List of topology JSON objects.
             locations: [], // List of location JSON objects.
+            ConnectionInfo: {},
             dataLineStruct: { // Structure of lines map.        
                 type: 'scattergeo',
                 lat: [],
@@ -26,7 +28,7 @@ export default {
                 hoverinfo: "skip",
                 line:{
                     width: 3,
-                    color: 'green'
+                    color: 'red'
                 },
                 marker : {
                     colorbar: {
@@ -55,10 +57,12 @@ export default {
          * Creates node map by looping though @topologies and adding an edge between each location and its neighbour.
          */
         async map() {
+            console.log("MAPPING");
             var data = [];
 
             for (var i in this.topologies) {
-                var localIp = this.topologies[i].current.ip
+                var local = this.topologies[i].current
+                var localIp = local.ip
                 var locationInfo = {}
 
                 await fetch(`http://${Constants.PUBLIC_IP}:8001/api/v1/ipInfo/fetch/ip/${localIp}`)
@@ -101,6 +105,11 @@ export default {
                                     var tmpDataLineStruct = JSON.parse(JSON.stringify(this.dataLineStruct));
                                     tmpDataLineStruct.lat = [neighbourInfo.lat, locationInfo.lat];
                                     tmpDataLineStruct.lon = [neighbourInfo.lon, locationInfo.lon];
+                                    console.log(`${local.siteId} : ${neighbours[j].siteId}`)
+                                    console.log(this.ConnectionInfo[local.siteId])
+                                    if (this.ConnectionInfo[local.siteId] != undefined && this.ConnectionInfo[local.siteId][neighbours[j].siteId] != undefined) {
+                                        tmpDataLineStruct.line.color = "green";
+                                    }
                                     data.push(tmpDataLineStruct);
 
                                     break;
@@ -114,8 +123,6 @@ export default {
 
 
             
-            console.log(data);
-
             var layout = {
                 showlegend: false,
                 margin: { r: 0, t: 0, b: 0, l: 0 },
@@ -160,7 +167,6 @@ export default {
         await fetch(`http://${Constants.PUBLIC_IP}:8001/api/v1/location/fetch`)
             .then(response => response.json())
             .then((jsonResponse) => {
-                console.log(jsonResponse);
                 this.locations = jsonResponse;
             });
 
@@ -171,6 +177,30 @@ export default {
                 this.map();
             });
 
+    var ws = new WebSocket(`ws://${Constants.PUBLIC_IP}:8002`);
+    ws.onopen = () => {
+        ws.send(WebSocketConstants.WebsocketCalls.connectionStatus);
+    }
+
+    ws.onmessage = (message) => {
+        var data = JSON.parse(message.data);
+        for (var i in data) {
+            if (data[i].ConnectionInfo != undefined) {
+                console.log(data[i].ConnectionInfo);
+                if (this.ConnectionInfo != data[i].ConnectionInfo) {
+                    this.ConnectionInfo = data[i].ConnectionInfo;
+                    this.map();
+                }
+                
+            }
+        }
+        
+    }
+
+    ws.onerror = (err) => {
+        console.log("ERROR ON WS CONNECTION: " + err);
+
+    }
     }
 }
 </script>
