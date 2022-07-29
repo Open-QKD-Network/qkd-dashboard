@@ -30,7 +30,6 @@ module.exports = class Connection {
         try {
             if (this.checkIfFileExists()) {
                 const lsrp = fs.readFileSync(this.dest, 'utf8');
-                console.log(lsrp);
                 return JSON.parse(lsrp);
             }
         } catch (e) {
