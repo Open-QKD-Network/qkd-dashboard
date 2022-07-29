@@ -93,6 +93,7 @@ module.exports = class WebsocketControllers {
      * @param {Int} time Time between calls, in seconds.
      */
      sendConenctionInfo = function() {
+        console.log(this.connectionClass.checkIfFileExists());
         if (!this.connectionClass.checkIfFileExists()) return;
         
         for (var i in this.connections) {
