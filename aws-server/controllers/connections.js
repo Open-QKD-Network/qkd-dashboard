@@ -28,7 +28,7 @@ module.exports = class Connection {
      */
     findConnectionStatus = function () {
         try {
-            if (checkIfFileExists()) {
+            if (this.checkIfFileExists()) {
                 const lsrp = fs.readFileSync(this.dest, 'utf8');
                 console.log(lsrp);
                 return JSON.parse(lsrp);
