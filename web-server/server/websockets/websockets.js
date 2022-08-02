@@ -5,6 +5,7 @@ const WebSocketServer = require("websocket").server
 const WebSocketClient = require("ws")
 const WebsocketCalls = require("../../../constants/websocketCalls").WebsocketCalls;
 const ipInfo = require("../models/ipInfo");
+const AvailableNetwork = require("../controllers/availableNetworks");
 
 require('dotenv').config();
 
@@ -18,6 +19,7 @@ module.exports = class websocketControllers{
         this.ipAddresses = [];
         this.websocketChannels = {};
         this.connections = [];
+
         this.crearteIpAdresses();
         this.createWebSocket();
     }
@@ -80,7 +82,12 @@ module.exports = class websocketControllers{
                          */
                         try {
                             for (var ip in this.websocketChannels) {
-                                this.websocketChannels[ip].send(WebsocketCalls.connectionStatus);
+                                var availability = await AvailableNetwork.getAvailableNetworkAsync(ip);
+                                if (availability.available) {
+                                    this.websocketChannels[ip].send(WebsocketCalls.connectionStatus);
+                                    break;
+                                }
+                                
                             }
                         } catch (e) {
                             console.error(e);

@@ -7,7 +7,7 @@ import fetch from 'node-fetch';
 import Plotly from'plotly.js-dist'
 import Constants from "../../config.js";
 import WebSocketConstants from "../../../../../constants/websocketCalls";
-
+import _ from "lodash";
 
 export default {
     name: 'NetworkMap',
@@ -105,8 +105,8 @@ export default {
                                     var tmpDataLineStruct = JSON.parse(JSON.stringify(this.dataLineStruct));
                                     tmpDataLineStruct.lat = [neighbourInfo.lat, locationInfo.lat];
                                     tmpDataLineStruct.lon = [neighbourInfo.lon, locationInfo.lon];
-                                    console.log(`${local.siteId} : ${neighbours[j].siteId}`)
-                                    console.log(this.ConnectionInfo[local.siteId])
+                                    // console.log(`${local.siteId} : ${neighbours[j].siteId}`)
+                                    // console.log(this.ConnectionInfo[local.siteId])
                                     if (this.ConnectionInfo[local.siteId] != undefined && this.ConnectionInfo[local.siteId][neighbours[j].siteId] != undefined) {
                                         tmpDataLineStruct.line.color = "green";
                                     }
@@ -186,8 +186,9 @@ export default {
         var data = JSON.parse(message.data);
         for (var i in data) {
             if (data[i].ConnectionInfo != undefined) {
-                console.log(data[i].ConnectionInfo);
-                if (this.ConnectionInfo != data[i].ConnectionInfo) {
+                if (!_.isEqual(this.ConnectionInfo, data[i].ConnectionInfo)) {
+                    console.log(this.ConnectionInfo);
+                    console.log(data[i].ConnectionInfo);
                     this.ConnectionInfo = data[i].ConnectionInfo;
                     this.map();
                 }

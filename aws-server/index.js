@@ -14,6 +14,7 @@ app.use(express.static("uploads"));
 
 // API routes.
 app.use("/api/v1/siteInformation", require("./routes/siteInformationRoutes"));
+app.use("/api/v1/availableNetwork", require("./routes/availableNetwork"));
 
 // Websocket Initilizer.
 websocketController = new websocket();
