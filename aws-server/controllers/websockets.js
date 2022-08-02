@@ -15,6 +15,8 @@ module.exports = class WebsocketControllers {
     constructor () {
         this.connections = [];
         this.createWebSocket();
+        this.lsrp = {};
+
         this.keyProductionClass = new KeyProduction;
         this.connectionClass = new Connection;
     }
@@ -61,7 +63,7 @@ module.exports = class WebsocketControllers {
                      */
                       case WebsocketCalls.connectionStatus:
                         try {
-                            this.sendConenctionInfo();
+                            this.sendConenctionInfo(true);
                         } catch (e) {
                             console.error(e);
                         }
@@ -92,11 +94,15 @@ module.exports = class WebsocketControllers {
      * Sends Key information through websocket connection.
      * @param {Int} time Time between calls, in seconds.
      */
-     sendConenctionInfo = function() {
+     sendConenctionInfo = function(isRequested = false) {
         if (!this.connectionClass.checkIfFileExists()) return;
+
+        var lsrp = this.connectionClass.findConnectionStatus()
+        if (JSON.stringify(lsrp) == JSON.stringify(this.lsrp)) return;
+        this.lsrp = lsrp
         
         for (var i in this.connections) {
-            this.connections[i].send(JSON.stringify({ConnectionInfo: this.connectionClass.findConnectionStatus()}));
+            this.connections[i].send(JSON.stringify({ConnectionInfo: this.lsrp}));
         }
     }    
 }
