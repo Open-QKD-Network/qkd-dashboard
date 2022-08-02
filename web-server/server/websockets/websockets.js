@@ -27,7 +27,7 @@ module.exports = class websocketControllers{
     /**
      * Creates websocket server on backend
      */
-    createWebSocket = function() {
+    createWebSocket = async function() {
         const httpserver = http.createServer((req, res) => {
             console.log("We have recived a request");
         });
