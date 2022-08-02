@@ -49,7 +49,7 @@ module.exports = class websocketControllers{
                 this.connections.splice(this.connections.indexOf(connection), 1);
                 console.log("CLOSED CONNECTION ON ORIGIN: " + request.origin)
             });
-            connection.on("message", message => {
+            connection.on("message", async (message) => {
                 switch(message.utf8Data) {
                     case  WebsocketCalls.ipCount: // Requested Topology.
                         /**
