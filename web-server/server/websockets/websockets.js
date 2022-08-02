@@ -18,6 +18,9 @@ module.exports = class websocketControllers{
         this.ipAddresses = [];
         this.websocketChannels = {};
         this.connections = [];
+        this.globalLSRP = {};
+
+
         this.crearteIpAdresses();
         this.createWebSocket();
     }
@@ -125,6 +128,11 @@ module.exports = class websocketControllers{
         ws.onmessage = (message) => {
             for (var i in this.connections) {
                 try {
+                    var data = JSON.parse(message.data)
+                    if (data.ConnectionInfo != undefined) {
+                        if (data.ConnectionInfo == this.globalLSRP) continue;
+                        else this.globalLSRP = data.ConnectionInfo;
+                    }
                     this.connections[i].send(JSON.stringify({[ip]: JSON.parse(message.data)}));
                 } catch (e) {
                     console.error("ERROR ON SENDING WEBSOCKET MESSAGE.")
