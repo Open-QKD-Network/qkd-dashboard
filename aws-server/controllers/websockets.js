@@ -98,7 +98,7 @@ module.exports = class WebsocketControllers {
         if (!this.connectionClass.checkIfFileExists()) return;
 
         var lsrp = this.connectionClass.findConnectionStatus()
-        if (JSON.stringify(lsrp) == JSON.stringify(this.lsrp)) return;
+        if (!isRequested && JSON.stringify(lsrp) == JSON.stringify(this.lsrp)) return;
         this.lsrp = lsrp
         
         for (var i in this.connections) {
