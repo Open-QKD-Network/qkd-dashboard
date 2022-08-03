@@ -105,9 +105,10 @@ export default {
                                     var tmpDataLineStruct = JSON.parse(JSON.stringify(this.dataLineStruct));
                                     tmpDataLineStruct.lat = [neighbourInfo.lat, locationInfo.lat];
                                     tmpDataLineStruct.lon = [neighbourInfo.lon, locationInfo.lon];
-                                    // console.log(`${local.siteId} : ${neighbours[j].siteId}`)
-                                    // console.log(this.ConnectionInfo[local.siteId])
                                     if (this.ConnectionInfo[local.siteId] != undefined && this.ConnectionInfo[local.siteId][neighbours[j].siteId] != undefined) {
+                                        console.log(`${local.siteId} : ${neighbours[j].siteId}`);
+                                        console.log(this.ConnectionInfo[local.siteId]);
+                                        console.log(this.ConnectionInfo[local.siteId][neighbours[j].siteId]);
                                         tmpDataLineStruct.line.color = "green";
                                     }
                                     data.push(tmpDataLineStruct);

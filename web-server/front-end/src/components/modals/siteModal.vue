@@ -73,9 +73,6 @@ export default {
                 for (var i in data) {
                     if (data[i].KeyInfo != undefined) {
                         this.keyInformation[i] = data[i].KeyInfo;
-                        console.log(this.keyInformation[i]);
-
-
                     }
                 }
                 
