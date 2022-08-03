@@ -1,7 +1,7 @@
 <template>
     <div  class="container">
         <div class="row align-items-center" id="topologyDiv">
-            <div class="d-flex justify-content-center" id="topologyCanvas"></div>
+            <div class="d-flex justify-content-center" style="height: 400px;" id="topologyCanvas"></div>
         </div>
     </div>
 </template>
@@ -10,7 +10,7 @@
 import fetch from 'node-fetch';
 import Constants from "../../config.js";
 import WebSocketConstants from "../../../../../constants/websocketCalls";
-
+import vis from "vis";
 
 export default {
     name: 'TopologyClass',
@@ -24,70 +24,94 @@ export default {
             topologies: [], // List of topology JSON objects.
             ConnectionInfo: {}, // Information regarding the connections.
 
+            idCount: 0,
 
-            Dracula: undefined,
-            Graph : undefined,
-            Renderer: undefined,
-            Layout: undefined,
+            nodeDataSet: [],
+            edgeDataSet: [],
+            
+            nodeDictionary: {},
+            edgeDictionary: {},
 
-            graphModel: undefined,
-            layout: undefined,
-            renderer: undefined
+            nodes: undefined,
+            edges: undefined
 
         }
     },
     // Method Functions
     methods: {
+        createNode(ipAddress, siteId) {
+            if (this.nodeDictionary[siteId] == undefined) {
+                var id = this.idCount;
+                this.idCount++;
+                this.nodeDictionary[siteId] = id;
+                this.nodeDataSet.push({ id: id, label: `${siteId} - ${ipAddress}` });
+            } else {
+                return null;
+            }
+        },
+        createEdge(fromSite, toSite) {
+            const identifier = `${fromSite}-${toSite}`;
+            const inverse = `${toSite}-${fromSite}`;
+
+            if (this.edgeDictionary[identifier] == undefined && this.edgeDictionary[inverse] == undefined) {
+                var id = this.idCount;
+                this.idCount++;
+                this.edgeDictionary[identifier] = id;
+                const from = this.nodeDictionary[fromSite];
+                const to = this.nodeDictionary[toSite];
+                this.edgeDataSet.push({ from: from, to: to , color: {color: '#ff0000'}});
+            } else {
+                return null
+            }
+        },
         /**
          * Creates node graph by looping though @topologies and adding an edge bwtween each IP and its neighbour.
          */
         graph() {
-            const successStyle = {
-                stroke: '#00ff00',
-                fill: '#00ff00',
-            };
 
-            const failedStyle = {
-                stroke: '#ff0000',
-                fill: '#ff0000',
-            };
-
-            var width = document.getElementById("topologyDiv").clientWidth - 20;
-
-            this.Dracula = require('graphdracula');
-            this.Graph = this.Dracula.Graph;
-            this.Renderer = this.Dracula.Renderer.Raphael;
-            this.Layout = this.Dracula.Layout.Spring;
-            
-            this.graphModel = new this.Graph();
-            
             for (var i in this.topologies) {
                 var currentSiteId = this.topologies[i]["current"]["siteId"];
                 var currentIp = this.topologies[i]["current"]["ip"];
-                
+                this.createNode(currentIp, currentSiteId);
+
                 var neighbours = this.topologies[i]["neighbours"]
                 for (var j in neighbours) {
                     var neigbourSiteId = neighbours[j]["siteId"];
                     var neigbourIp = neighbours[j]["ip"];
-                    //console.log(`${this.ConnectionInfo[currentSiteId][neigbourSiteId]} : ${currentSiteId} : ${neigbourSiteId}`)
-                    if (this.ConnectionInfo[currentSiteId] != undefined && this.ConnectionInfo[currentSiteId][neigbourSiteId] != undefined){
-                        this.graphModel.addEdge(`${currentSiteId} - ${currentIp}`, `${neigbourSiteId} - ${neigbourIp}`, {style: successStyle});
-                    } else {
-                        this.graphModel.addEdge(`${currentSiteId} - ${currentIp}`, `${neigbourSiteId} - ${neigbourIp}`, {style: failedStyle});
-                    }
+                    this.createNode(neigbourIp, neigbourSiteId);
+
+                    this.createEdge(currentSiteId, neigbourSiteId);
+
                 }
             }
-            
-            this.layout = new this.Layout(this.graphModel);
-            this.layout.layout();
-            this.renderer = new this.Renderer('#topologyCanvas', this.graphModel, width, 400);
-            this.renderer.draw();
+
+            this.nodes = new vis.DataSet(this.nodeDataSet);
+
+            this.edges = new vis.DataSet(this.edgeDataSet);
+
+            // create a network
+            var container = document.getElementById("topologyCanvas");
+            var data = {
+            nodes: this.nodes,
+            edges: this.edges,
+            };
+            var options = {};
+            new vis.Network(container, data, options);
         },
 
 
         regraph() {
-            // this.layout.layout();
-            // this.renderer.draw();
+            console.log(this.ConnectionInfo);
+            for (var i in this.ConnectionInfo) {
+                for(var j in this.ConnectionInfo[i]) {
+                    if (this.edgeDictionary[`${i}-${j}`] != undefined) {
+                        this.edges.update([{
+                            id: this.edgeDictionary[`${i}-${j}`],
+                            color: {color: '#00ff00'}
+                        }]);
+                    }
+                }
+            }
         }
     }, 
     /**
@@ -111,6 +135,7 @@ export default {
                 if (data[i].ConnectionInfo != undefined) {
                     if (this.ConnectionInfo != data[i].ConnectionInfo) {
                         this.ConnectionInfo = data[i].ConnectionInfo;
+                        console.log(data)
                         this.regraph();
                     }
                     

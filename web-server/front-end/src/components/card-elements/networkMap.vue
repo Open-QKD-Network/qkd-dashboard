@@ -57,7 +57,6 @@ export default {
          * Creates node map by looping though @topologies and adding an edge between each location and its neighbour.
          */
         async map() {
-            console.log("MAPPING");
             var data = [];
 
             for (var i in this.topologies) {
@@ -106,9 +105,6 @@ export default {
                                     tmpDataLineStruct.lat = [neighbourInfo.lat, locationInfo.lat];
                                     tmpDataLineStruct.lon = [neighbourInfo.lon, locationInfo.lon];
                                     if (this.ConnectionInfo[local.siteId] != undefined && this.ConnectionInfo[local.siteId][neighbours[j].siteId] != undefined) {
-                                        console.log(`${local.siteId} : ${neighbours[j].siteId}`);
-                                        console.log(this.ConnectionInfo[local.siteId]);
-                                        console.log(this.ConnectionInfo[local.siteId][neighbours[j].siteId]);
                                         tmpDataLineStruct.line.color = "green";
                                     }
                                     data.push(tmpDataLineStruct);
@@ -188,8 +184,6 @@ export default {
         for (var i in data) {
             if (data[i].ConnectionInfo != undefined) {
                 if (!_.isEqual(this.ConnectionInfo, data[i].ConnectionInfo)) {
-                    console.log(this.ConnectionInfo);
-                    console.log(data[i].ConnectionInfo);
                     this.ConnectionInfo = data[i].ConnectionInfo;
                     this.map();
                 }
