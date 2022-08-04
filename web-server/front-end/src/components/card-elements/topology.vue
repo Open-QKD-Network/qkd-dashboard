@@ -41,10 +41,12 @@ export default {
     methods: {
         createNode(ipAddress, siteId) {
             if (this.nodeDictionary[siteId] == undefined) {
-                var id = this.idCount;
+                const id = this.idCount;
                 this.idCount++;
                 this.nodeDictionary[siteId] = id;
-                this.nodeDataSet.push({ id: id, label: `${siteId} - ${ipAddress}` });
+                const color = "#" +  Math.floor((Math.random() * 0xFFFFFF)).toString(16);
+                console.log(color); 
+                this.nodeDataSet.push({ id: id, label: `${siteId} - ${ipAddress}`, color: color});
             } else {
                 return null;
             }
@@ -54,12 +56,12 @@ export default {
             const inverse = `${toSite}-${fromSite}`;
 
             if (this.edgeDictionary[identifier] == undefined && this.edgeDictionary[inverse] == undefined) {
-                var id = this.idCount;
+                const id = this.idCount;
                 this.idCount++;
-                this.edgeDictionary[identifier] = id;
                 const from = this.nodeDictionary[fromSite];
                 const to = this.nodeDictionary[toSite];
-                this.edgeDataSet.push({ from: from, to: to , color: {color: '#ff0000'}});
+                this.edgeDictionary[identifier] = {id: id, from: fromSite, to: toSite};
+                this.edgeDataSet.push({ id: id, from: from, to: to , color: {color: '#ff0000'}});
             } else {
                 return null
             }
@@ -95,21 +97,59 @@ export default {
             nodes: this.nodes,
             edges: this.edges,
             };
-            var options = {};
+            var options = {
+                layout: { clusterThreshold: 200},
+                physics: {
+                    stabilization: false,
+                    barnesHut: {
+                        springLength: 500,
+                        springConstant: 0
+                    },
+                },
+                nodes: {
+                    shape: "dot",
+                    size: 25,
+                    font: {
+                        size: 15,
+                    },
+                    borderWidth: 1,
+                },
+                edges: {
+                    width: 3,
+                    length: 400,
+                    color: {
+                        inherit: false,
+                    }
+                },
+                smooth: false
+            };
             new vis.Network(container, data, options);
         },
 
-
+        /**
+         * 
+         */
         regraph() {
+            console.log("REGRAPH");
             console.log(this.ConnectionInfo);
-            for (var i in this.ConnectionInfo) {
-                for(var j in this.ConnectionInfo[i]) {
-                    if (this.edgeDictionary[`${i}-${j}`] != undefined) {
-                        this.edges.update([{
-                            id: this.edgeDictionary[`${i}-${j}`],
+            console.log(this.edgeDictionary);
+            console.log(this.edges);
+            for (var i in this.edgeDictionary) {
+                const from = this.edgeDictionary[i].from;
+                const to = this.edgeDictionary[i].to;
+                
+                if (this.ConnectionInfo[from] != undefined && this.ConnectionInfo[to] != undefined &&
+                    this.ConnectionInfo[from][to] != undefined && this.ConnectionInfo[to][from] != undefined) {
+                    console.log(this.edgeDictionary[`${from}-${to}`]);
+                    this.edges.update([{
+                            id: this.edgeDictionary[`${from}-${to}`].id,
                             color: {color: '#00ff00'}
                         }]);
-                    }
+                } else {
+                    this.edges.update([{
+                            id: this.edgeDictionary[`${from}-${to}`].id,
+                            color: {color: '#ff0000'}
+                        }]);
                 }
             }
         }
