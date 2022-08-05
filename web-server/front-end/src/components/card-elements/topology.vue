@@ -24,33 +24,48 @@ export default {
             topologies: [], // List of topology JSON objects.
             ConnectionInfo: {}, // Information regarding the connections.
 
-            idCount: 0,
+            idCount: 0, // ID tracker
 
-            nodeDataSet: [],
-            edgeDataSet: [],
+            nodeDataSet: [], // List of the Node dataset used by vis
+            edgeDataSet: [], // List of the edge dataset used by vi
             
-            nodeDictionary: {},
-            edgeDictionary: {},
+            nodeDictionary: {}, // KVP of the site and its ID
+            edgeDictionary: {}, // KVP of the edge and the information provided by the edge
 
-            nodes: undefined,
-            edges: undefined
+            nodes: undefined, // Nodes object
+            edges: undefined // Edges object
 
         }
     },
     // Method Functions
     methods: {
+
+
+        /**
+         * Adds a node to the node object
+         * @param {String} ipAddress IP address of node.
+         * @param {String} siteId Site ID of node.
+         */
         createNode(ipAddress, siteId) {
             if (this.nodeDictionary[siteId] == undefined) {
                 const id = this.idCount;
                 this.idCount++;
                 this.nodeDictionary[siteId] = id;
+                
                 const color = "#" +  Math.floor((Math.random() * 0xFFFFFF)).toString(16);
-                console.log(color); 
+
                 this.nodeDataSet.push({ id: id, label: `${siteId} - ${ipAddress}`, color: color});
             } else {
                 return null;
             }
         },
+
+
+        /**
+         * Adds edge from fromSite to toSite
+         * @param {String} fromSite Site ID of one end.
+         * @param {String} toSite Site ID of other end.
+         */
         createEdge(fromSite, toSite) {
             const identifier = `${fromSite}-${toSite}`;
             const inverse = `${toSite}-${fromSite}`;
@@ -66,6 +81,8 @@ export default {
                 return null
             }
         },
+
+
         /**
          * Creates node graph by looping though @topologies and adding an edge bwtween each IP and its neighbour.
          */
@@ -127,20 +144,15 @@ export default {
         },
 
         /**
-         * 
+         * Regraphs the exiting topology.
          */
         regraph() {
-            console.log("REGRAPH");
-            console.log(this.ConnectionInfo);
-            console.log(this.edgeDictionary);
-            console.log(this.edges);
             for (var i in this.edgeDictionary) {
                 const from = this.edgeDictionary[i].from;
                 const to = this.edgeDictionary[i].to;
                 
                 if (this.ConnectionInfo[from] != undefined && this.ConnectionInfo[to] != undefined &&
                     this.ConnectionInfo[from][to] != undefined && this.ConnectionInfo[to][from] != undefined) {
-                    console.log(this.edgeDictionary[`${from}-${to}`]);
                     this.edges.update([{
                             id: this.edgeDictionary[`${from}-${to}`].id,
                             color: {color: '#00ff00'}
@@ -175,7 +187,6 @@ export default {
                 if (data[i].ConnectionInfo != undefined) {
                     if (this.ConnectionInfo != data[i].ConnectionInfo) {
                         this.ConnectionInfo = data[i].ConnectionInfo;
-                        console.log(data)
                         this.regraph();
                     }
                     
