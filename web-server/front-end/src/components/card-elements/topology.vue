@@ -29,7 +29,8 @@ export default {
             nodeDataSet: [], // List of the Node dataset used by vis
             edgeDataSet: [], // List of the edge dataset used by vi
             
-            nodeDictionary: {}, // KVP of the site and its ID
+            nodeDictionarySiteKey: {}, // KVP of the site and its ID.
+            nodeDictionaryIdKey: {}, // KVP of the ID and its IP.
             edgeDictionary: {}, // KVP of the edge and the information provided by the edge
 
             nodes: undefined, // Nodes object
@@ -47,11 +48,15 @@ export default {
          * @param {String} siteId Site ID of node.
          */
         createNode(ipAddress, siteId) {
-            if (this.nodeDictionary[siteId] == undefined) {
+            if (this.nodeDictionarySiteKey[siteId] == undefined) {
                 const id = this.idCount;
                 this.idCount++;
-                this.nodeDictionary[siteId] = id;
-                
+                this.nodeDictionarySiteKey[siteId] = id;
+                this.nodeDictionaryIdKey[id.toString()] = ipAddress;
+
+                console.log(this.nodeDictionaryIdKey);
+
+
                 const color = "#" +  Math.floor((Math.random() * 0xFFFFFF)).toString(16);
 
                 this.nodeDataSet.push({ id: id, label: `${siteId} - ${ipAddress}`, color: color});
@@ -73,10 +78,10 @@ export default {
             if (this.edgeDictionary[identifier] == undefined && this.edgeDictionary[inverse] == undefined) {
                 const id = this.idCount;
                 this.idCount++;
-                const from = this.nodeDictionary[fromSite];
-                const to = this.nodeDictionary[toSite];
+                const from = this.nodeDictionarySiteKey[fromSite];
+                const to = this.nodeDictionarySiteKey[toSite];
                 this.edgeDictionary[identifier] = {id: id, from: fromSite, to: toSite};
-                this.edgeDataSet.push({ id: id, from: from, to: to , color: {color: '#ff0000'}});
+                this.edgeDataSet.push({ id: id, from: from, to: to , color: {color: '#ff0000', highlight:'#ff0000'}});
             } else {
                 return null
             }
@@ -155,17 +160,17 @@ export default {
                     this.ConnectionInfo[from][to] != undefined && this.ConnectionInfo[to][from] != undefined) {
                     this.edges.update([{
                             id: this.edgeDictionary[`${from}-${to}`].id,
-                            color: {color: '#00ff00'}
+                            color: {color: '#00ff00', highlight: '#00ff00'}
                         }]);
                 } else {
                     this.edges.update([{
                             id: this.edgeDictionary[`${from}-${to}`].id,
-                            color: {color: '#ff0000'}
+                            color: {color: '#ff0000', highlight: '#ff0000'}
                         }]);
                 }
             }
-        }
-    }, 
+        },
+    },
     /**
      * Mounted class once webpage is up. Fetches locations and sites from backend.
      */
