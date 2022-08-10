@@ -42,9 +42,15 @@ To start you need to setup mongodb on the device you run the backend in (if it's
 To install mongodb use the following commands
 
 ```
+sudo apt install dirmngr gnupg apt-transport-https ca-certificates software-properties-common
+
+sudo echo "deb http://security.ubuntu.com/ubuntu impish-security main" | sudo tee /etc/apt/sources.list.d/impish-security.list
+
 sudo apt-get update
 
-sudo apt-get install libssl1.1
+wget http://archive.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.1_1.1.1f-1ubuntu2_amd64.deb
+
+sudo dpkg -i libssl1.1_1.1.1f-1ubuntu2_amd64.deb
 
 wget -qO - https://www.mongodb.org/static/pgp/server-6.0.asc | sudo apt-key add -
 
