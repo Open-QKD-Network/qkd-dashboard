@@ -1,0 +1,27 @@
+<template>
+  <SiteModal />
+  <Cards75_25 title1="QKD Network Topology" title2="IP Information" tab1="topology" tab2="sites"/>
+  <CardClass title="QKD Network Map" tab="network-map"/>
+</template>
+
+<script>
+import CardClass from './components/cards.vue'
+import Cards75_25 from './components/cards-75-25.vue'
+import SiteModal from './components/modals/siteModal.vue'
+
+/**
+ * MAIN APP.
+ */
+export default {
+  name: 'App',
+  /**
+   * Used Components
+   */
+  components: {
+    Cards75_25,
+    SiteModal,
+    CardClass
+  }
+}
+</script>
+

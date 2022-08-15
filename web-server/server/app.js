@@ -3,7 +3,7 @@ require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-const websocket = require('./controllers/websocket');
+const websocket = require('./websockets/websockets');
 
 const app = express();
 const port = process.env.PORT; // check .env for such constants
@@ -23,10 +23,13 @@ mongoose.connect(process.env.DB_URI, {
     .catch((err) => console.log("FAILED TO CONNECT TO DATABASE '" + process.env.DB_URI + "' : " + err));
 
 // Routes Prefix.   
-app.use("/api/v1", require("./routes/routes"));
+app.use("/api/v1/location", require("./routes/locationRoutes"));
+app.use("/api/v1/ipInfo", require("./routes/ipInfoRoutes"));
+app.use("/api/v1/sites", require("./routes/sitesRoutes"));
 
-// Websocket Prefix.
-websocket.demoWebSocket();
+
+// Websocket.
+websocketController = new websocket();
 
 
 // Start Server.
