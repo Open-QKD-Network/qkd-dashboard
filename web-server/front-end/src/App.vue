@@ -1,8 +1,9 @@
 <script setup>
 import { onMounted } from "vue";
+import { storeToRefs } from "pinia";
 import NetworkMap from "@/components/NetworkMap.vue";
 import NetworkTopology from "@/components/NetworkTopology.vue";
-import { useConnectionInfoStore } from "@/stores/connectionInfo";
+import { useGlobalStore } from "@/stores/global";
 
 // Results in amgbiguous import error so for now this is hardcoded
 const WebSocketCalls = {
@@ -12,13 +13,24 @@ const WebSocketCalls = {
   connectionStatus: "3",
 };
 
-const connectionInfoStore = useConnectionInfoStore();
+const globalStore = useGlobalStore();
+const { connectionInfo, locations, topologies } = storeToRefs(globalStore);
 
 const PUBLIC_IP = import.meta.env.VITE_PUBLIC_IP;
 const WS_PORT = import.meta.env.VITE_SERVER_WS_PORT;
+const serverURL = `http://${PUBLIC_IP}:8001/api/v1`;
 const wsURL = `ws://${PUBLIC_IP}:${WS_PORT}`;
 
 onMounted(async () => {
+  const locationResponse = await fetch(`${serverURL}/location/fetch`);
+  const locationsArray = await locationResponse.json();
+  for (const location of locationsArray) {
+    locations.value[location._id] = location;
+  }
+
+  const topologiesResponse = await fetch(`${serverURL}/sites/fetch`);
+  topologies.value = await topologiesResponse.json();
+
   const ws = new WebSocket(wsURL);
 
   ws.onopen = () => {
@@ -29,8 +41,8 @@ onMounted(async () => {
     const data = JSON.parse(message.data);
     for (const ip in data) {
       if (data[ip].ConnectionInfo !== undefined) {
-        connectionInfoStore.update(data[ip].ConnectionInfo);
-        connectionInfoStore.runCallbacks();
+        connectionInfo.value = data[ip].ConnectionInfo;
+        globalStore.runCallbacks();
       }
     }
   };
