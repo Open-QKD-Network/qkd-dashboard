@@ -120,9 +120,9 @@ The ```/ipInfo/``` documentation
 |-------------------	|--------	|-------------------------------	|
 | /fetch            	| GET    	| NULL                          	|
 | /fetch/id/?id     	| GET    	| NULL                          	|
-| /fetch/city/?ip| GET    	| NULL                          	|
-| /create           	| POST   	| ip; locationId;    	|
-| /update/?id       	| PATCH  	| ip?; locationId?; 	|
+| /fetch/ip/?ip      | GET    	| NULL                          	|
+| /create           	| POST   	| ip; locationId;    	         |
+| /update/?id       	| PATCH  	| ip?; locationId?; 	            |
 | /delete/?id       	| DELETE 	| NULL                          	|
 
 The ```/sites/``` documentation
@@ -131,4 +131,4 @@ The ```/sites/``` documentation
 | /fetch            	| GET    	| NULL                          	|
 
 As of now the best way to access the API is using postman (For the body information, provide it under x-www-form-urlencoded).
-
+Here is a [link to a postman collection](https://www.postman.com/science-geoscientist-97417074/workspace/openqkdnetwork/collection/17576385-491b21f4-e7a1-4270-bebb-172467a83849?action=share&creator=17576385&ctx=documentation) with the endpoints listed above.
