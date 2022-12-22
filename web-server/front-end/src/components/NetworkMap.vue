@@ -1,27 +1,14 @@
 <script setup>
-import { reactive, onMounted } from "vue";
+import { onMounted } from "vue";
 import { storeToRefs } from "pinia";
-import { useConnectionInfoStore } from "@/stores/connectionInfo";
 import Plotly from "plotly.js-dist";
-
-// Results in amgbiguous import error so for now this is hardcoded
-const WebsocketCalls = {
-  keyInfo: "0",
-  keyRate: "1",
-  ipCount: "2",
-  connectionStatus: "3",
-};
+import { useGlobalStore } from "@/stores/global";
 
 const PUBLIC_IP = import.meta.env.VITE_PUBLIC_IP;
 const url = `http://${PUBLIC_IP}:8001/api/v1`;
-const wsUrl = `ws://${PUBLIC_IP}:8002`;
 
-const state = reactive({
-  locations: {},
-  topologies: [],
-});
-const connectionInfoStore = useConnectionInfoStore();
-const { connectionInfo } = storeToRefs(connectionInfoStore);
+const globalStore = useGlobalStore();
+const { connectionInfo, locations, topologies } = storeToRefs(globalStore);
 
 const layout = {
   showlegend: false,
@@ -43,17 +30,17 @@ const layout = {
   },
 };
 
-const createNodeMap = async () => {
+async function createNodeMap() {
   const nodesIpInfo = {};
-  for (const topology of state.topologies) {
+  for (const topology of topologies.value) {
     const ipInfoResponse = await fetch(
       `${url}/ipInfo/fetch/ip/${topology.current.ip}`
     );
     nodesIpInfo[topology.current.ip] = await ipInfoResponse.json();
   }
-  const nodesData = state.topologies.flatMap((topology) => {
+  const nodesData = topologies.value.flatMap((topology) => {
     const ipInfo = nodesIpInfo[topology.current.ip];
-    const location = state.locations[ipInfo.locationId];
+    const location = locations.value[ipInfo.locationId];
 
     const data = [];
 
@@ -72,7 +59,7 @@ const createNodeMap = async () => {
     for (const neighbour of topology.neighbours) {
       const neighbourIpInfo = nodesIpInfo?.[neighbour.ip];
       if (neighbourIpInfo) {
-        const neighbourLocation = state.locations[neighbourIpInfo.locationId];
+        const neighbourLocation = locations.value[neighbourIpInfo.locationId];
         const connection = {
           type: "scattergeo",
           lat: [
@@ -111,19 +98,15 @@ const createNodeMap = async () => {
   });
 
   Plotly.newPlot("network-map", nodesData, layout, { responsive: true });
-};
+}
 
-onMounted(async () => {
-  const locationResponse = await fetch(`${url}/location/fetch`);
-  const locationsArray = await locationResponse.json();
-  for (const location of locationsArray) {
-    state.locations[location._id] = location;
-  }
-  const topologiesResponse = await fetch(`${url}/sites/fetch`);
-  state.topologies = await topologiesResponse.json();
+onMounted(() => {
   createNodeMap();
 
-  connectionInfoStore.registerCallback(createNodeMap);
+  globalStore.registerCallback({
+    name: "createNodeMap",
+    callback: createNodeMap,
+  });
 });
 </script>
 <template>
