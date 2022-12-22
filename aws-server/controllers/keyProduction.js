@@ -12,7 +12,7 @@ module.exports = class KeyProduction {
     constructor() {
         this.dest = process.env.KEYS_PATH;
 
-        var neighboursJson = topology.getNeigbourInfo();
+        var neighboursJson = topology.getNeighbourInfo();
         this.siteId = topology.getCurrentInfo().siteId;
         this.siteKeyJson = {};
 
