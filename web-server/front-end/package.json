@@ -13,6 +13,7 @@
     "lodash-es": "^4.17.21",
     "pinia": "^2.0.28",
     "plotly.js-dist": "^2.16.5",
+    "vis-network": "^9.1.2",
     "vue": "^3.2.45"
   },
   "devDependencies": {
