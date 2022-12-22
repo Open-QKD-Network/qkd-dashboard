@@ -1,13 +1,13 @@
 /**
  * Key Count class.
  * @param {string} siteId The name of the site ID. (A, B, etc...)
- * @param {string} neigbourId The name of the neighbour ID. (A, B, etc...)
+ * @param {string} neighbourId The name of the neighbour ID. (A, B, etc...)
  * @param {string} count Number of keys between iteId and neighbourId.
  */
  class KeyCount {
     constructor (siteData) {
         this.siteId = siteData.siteId;
-        this.neigbourId = siteData.neigbourId;
+        this.neighbourId = siteData.neighbourId;
         this.count = siteData.count;
     }
 }

@@ -23,38 +23,38 @@ module.exports = class KeyProduction {
 
     /**
      * Reads file destination and checks the number of keys.
-     * @param {String} neigbourId Neighbour site ID.
+     * @param {String} neighbourId Neighbour site ID.
      * @returns Number of keys for neighbout site.
      */
-    getKeyCount = function (neigbourId) {
-        return fs.readdirSync(`${this.dest}/${neigbourId}`).length - 1;
+    getKeyCount = function (neighbourId) {
+        return fs.readdirSync(`${this.dest}/${neighbourId}`).length - 1;
     }
     
     /**
-     * Calculates the key rate between the current site and all neigbour site.
+     * Calculates the key rate between the current site and all neighbour site.
      * @param {int} time time between checks, in seconds.
      * @returns Array of KeyRate JSON.
      */
     calculateKeyRate = function (time) {
         var neighborKeyRates = [];
-        for (var neigbourId in this.siteKeyJson) {
-            var currentKeyCount = this.getKeyCount(neigbourId);
-            var rate = (currentKeyCount - this.siteKeyJson[neigbourId]) / time;
-            this.siteKeyJson[neigbourId] = currentKeyCount;
-            neighborKeyRates.push(new KeyRate.KeyRate({siteId: this.siteId, neigbourId: neigbourId, rate: rate}));
+        for (var neighbourId in this.siteKeyJson) {
+            var currentKeyCount = this.getKeyCount(neighbourId);
+            var rate = (currentKeyCount - this.siteKeyJson[neighbourId]) / time;
+            this.siteKeyJson[neighbourId] = currentKeyCount;
+            neighborKeyRates.push(new KeyRate.KeyRate({siteId: this.siteId, neighbourId: neighbourId, rate: rate}));
         }
         return neighborKeyRates;
     }
 
     /**
-     * Calculates the number of keys between the current site and neigbour site.
-     * @param {String} neigbourId ID of neighbour whos key count we check.
+     * Calculates the number of keys between the current site and neighbour site.
+     * @param {String} neighbourId ID of neighbour whos key count we check.
      * @returns KeyCount Json.
      */
     calculateKeyCount = function () {
         var neighborKeyCount = [];
-        for (var neigbourId in this.siteKeyJson) {
-            neighborKeyCount.push(new KeyCount.KeyCount({siteId: this.siteId, neigbourId: neigbourId, count: this.getKeyCount(neigbourId)}));
+        for (var neighbourId in this.siteKeyJson) {
+            neighborKeyCount.push(new KeyCount.KeyCount({siteId: this.siteId, neighbourId: neighbourId, count: this.getKeyCount(neighbourId)}));
         }
         return neighborKeyCount;
     }
