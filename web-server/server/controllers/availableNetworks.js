@@ -11,7 +11,7 @@ module.exports = class AvailableNetwork {
      * @returns async fetch call for the JSON of the availablibility of the network for provided IP.
      */
     static async getAvailableNetworkAsync(ip) {
-        return fetch(`http://${ip}:7080/api/v1/availableNetwork/isAvailable`)
+        return fetch(`http://${ip}:${process.env.AWS_PORT_REST}/api/v1/availableNetwork/isAvailable`)
             .then(response=> response.json())
             .then((jsonResponse)=> {return jsonResponse});
     }

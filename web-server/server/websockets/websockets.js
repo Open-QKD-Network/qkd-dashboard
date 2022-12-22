@@ -20,7 +20,7 @@ module.exports = class websocketControllers{
         this.websocketChannels = {};
         this.connections = [];
 
-        this.crearteIpAdresses();
+        this.createIpAdresses();
         this.createWebSocket();
     }
 
@@ -108,12 +108,12 @@ module.exports = class websocketControllers{
     /**
      * Creates list with all available IP addresses.
      */
-    crearteIpAdresses = async function() {
+    createIpAdresses = async function() {
         var ipInfoJson = await ipInfo.find();
 
         for (var i in ipInfoJson) {
             this.ipAddresses.push(ipInfoJson[i].ip);
-            this.crearteWebsocketChannels(i);
+            this.createWebsocketChannels(i);
         }
     }
 
@@ -121,9 +121,9 @@ module.exports = class websocketControllers{
     /**
      * Creates websocket client on backend for all IP addresses.
      */
-    crearteWebsocketChannels = function(index) {
+    createWebsocketChannels = function(index) {
         var ip = this.ipAddresses[index];
-        var ws = new WebSocketClient(`ws://${this.ipAddresses[index]}:7070/api/v1`);
+        var ws = new WebSocketClient(`ws://${this.ipAddresses[index]}:${process.env.AWS_PORT_WS}/api/v1`);
         ws.onerror = (e) => {
             console.log(`ERROR AT ${ip}: ${e.message}`);
             this.ipAddresses.splice(index, 1);

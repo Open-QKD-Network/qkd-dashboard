@@ -18,6 +18,7 @@ module.exports = class SitesApi {
                         topologies.push(await topology.getTopologyAsync(ip));
                     } catch (e) {
                         console.log("ERROR ON FETCHING SITE FOR " + ip)
+                        console.error(e)
                     }
                 }
                 res.status(200).json(topologies);
