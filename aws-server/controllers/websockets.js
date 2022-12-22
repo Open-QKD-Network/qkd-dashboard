@@ -59,11 +59,11 @@ module.exports = class WebsocketControllers {
                         }
                         break;
                      /**
-                     * In this case, we will send back the Connection status by invoking sendConenctionInfo().
+                     * In this case, we will send back the Connection status by invoking sendConnectionInfo().
                      */
                       case WebsocketCalls.connectionStatus:
                         try {
-                            this.sendConenctionInfo(true);
+                            this.sendConnectionInfo(true);
                         } catch (e) {
                             console.error(e);
                         }
@@ -94,7 +94,7 @@ module.exports = class WebsocketControllers {
      * Sends Key information through websocket connection.
      * @param {Int} time Time between calls, in seconds.
      */
-     sendConenctionInfo = function(isRequested = false) {
+     sendConnectionInfo = function(isRequested = false) {
         if (!this.connectionClass.checkIfFileExists()) return;
 
         var lsrp = this.connectionClass.findConnectionStatus()
