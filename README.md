@@ -53,11 +53,11 @@ If you're debugging or testing for development, use:
 npm run dev
 ```
 
-Run this system on every network endpoint that you are using.
+Run this system on every node in the network.
 
-### Web Server Backend
+### Web Server Back-End
 
-This system exists  in:
+This system exists in:
 
 ```bash
 cd web-server/server
@@ -65,7 +65,7 @@ cd web-server/server
 
 You only need to run this on a single device.
 
-To start you need to setup `mongodb` on the device you run the backend in (if it's not setup already.)
+To start you need to setup `mongodb` on the device you run the back-end in (if it's not setup already.)
 
 To install `mongodb` use the following commands
 
@@ -115,7 +115,7 @@ And then you run the server using
 npm run start
 ```
 
-### Web Server Frontend
+### Web Server Front-End
 
 This system exists  in:
 
@@ -129,21 +129,18 @@ First, install:
 npm install
 ```
 
-To Run the frontend: 
+To Run the front-end: 
 
 ``` 
 npm run dev
 ```
 
-There are other methods of running the front-end, check the README in front-end for more information.
+There are other methods of running the front-end, check the [README](web-server/front-end/README.md) in front-end for more information.
 
-### Backend API
+### Back-End API
 
-The backend API was designed to run on 
-
-```
-http://54.85.3.207:8001/api/v1
-```
+Note, query elements such as `?id` are not to be inputted as query parameters but as just their values.
+For example, if you want to fetch the location info for the city `Waterloo` the URL would look like `/locations/fetch/city/Waterloo` instead of `/locations/fetch/city/?city=Waterloo`.
 
 The `/locations/` documentation
 | Endpoint          	| Method 	| Body                          	|
@@ -170,8 +167,6 @@ The `/sites/` documentation
 |-------------------	|--------	|-------------------------------	|
 | /fetch            	| GET    	| NULL                          	|
 
-Note, query elements such as `?id` are not to be inputted as query parameters but as just their values.
-For example, if you want to fetch the location info for the city `Waterloo` the URL would look like `/locations/fetch/city/Waterloo` instead of `/locations/fetch/city/?city=Waterloo`.
 
 As of now the best way to access the API is using postman (For the body information, provide it under x-www-form-urlencoded).
-Here is a [link to a postman collection](https://www.postman.com/science-geoscientist-97417074/workspace/openqkdnetwork/collection/17576385-491b21f4-e7a1-4270-bebb-172467a83849?action=share&creator=17576385&ctx=documentation) with the endpoints listed above.
+Here is a [link to a postman collection](https://www.postman.com/science-geoscientist-97417074/workspace/openqkdnetwork/collection/17576385-491b21f4-e7a1-4270-bebb-172467a83849?action=share&creator=17576385&ctx=documentation) with the endpoints listed above. Feel free to create a local copy and edit your collection copy as needed.
