@@ -15,7 +15,7 @@ module.exports = class TopologyControllers {
      */
     static getTopology() {
         try {
-            return new topology.Topology({"current": this.getCurrentInfo(), "neighbours": this.getNeigbourInfo()});
+            return new topology.Topology({"current": this.getCurrentInfo(), "neighbours": this.getNeighbourInfo()});
         } catch (e) {
             console.log(e);
             throw new Error("ERROR WHEN CREATING TOPOLOGY");
@@ -54,7 +54,7 @@ module.exports = class TopologyControllers {
      * Retrieves the site ID and IP address from path specified in the .env file
      * and returns list of neighbours sites.
      */ 
-     static getNeigbourInfo() {
+     static getNeighbourInfo() {
         try {
             var routesString = fs.readFileSync(process.env.ROUTES_JSON_PATH, 'utf8');
             var routesJson = JSON.parse(routesString);

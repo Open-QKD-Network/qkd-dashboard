@@ -1,7 +1,15 @@
-import { createApp } from 'vue'
-import App from './App.vue'
-import "bootstrap/dist/css/bootstrap.min.css"
-import "bootstrap"
+import { createApp } from "vue";
+import { createPinia } from "pinia";
+import ElementPlus from "element-plus";
+import "element-plus/dist/index.css";
+import "element-plus/theme-chalk/dark/css-vars.css";
+import App from "./App.vue";
 
-// Mounting Vue component on index.
-createApp(App).mount('#app')
+import "./assets/main.css";
+
+const app = createApp(App);
+
+app.use(createPinia());
+app.use(ElementPlus);
+
+app.mount("#app");
