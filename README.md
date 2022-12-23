@@ -19,7 +19,7 @@ The dashboard is comprised of three parts: the aws server, the back-end server, 
 The recommended setup is to install and setup the front-end and back-end server, residing in `web-server/front-end` and `web-server/server` respectively, on your local machine.
 As for the aws server, residing in `aws-server`, you should run an instance of it on each node in the QKD network.
 
-After which you will still notice that nothing is being shown on the front-end. To fix this you must load the data to the backend via the [backend API](#backend-api).
+After which you will still notice that nothing is being shown on the front-end. To fix this you must load the data to the back-end via the [back-end API](#back-end-api).
 
 This means adding in the location data for all the places the nodes reside in via the `locations` API route.
 On top of that you need to add all the IP information for each node via the `ipInfo` API route.
