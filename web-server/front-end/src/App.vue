@@ -1,8 +1,10 @@
 <script setup>
 import { onMounted } from "vue";
 import { storeToRefs } from "pinia";
+import merge from "lodash-es/merge";
 import NetworkMap from "@/components/NetworkMap.vue";
 import NetworkTopology from "@/components/NetworkTopology.vue";
+import SiteInfo from "@/components/SiteInfo.vue";
 import { useGlobalStore } from "@/stores/global";
 
 // Results in amgbiguous import error so for now this is hardcoded
@@ -14,7 +16,8 @@ const WebSocketCalls = {
 };
 
 const globalStore = useGlobalStore();
-const { connectionInfo, locations, topologies } = storeToRefs(globalStore);
+const { connectionInfo, siteInfo, locations, topologies } =
+  storeToRefs(globalStore);
 
 const PUBLIC_IP = import.meta.env.VITE_PUBLIC_IP;
 const WS_PORT = import.meta.env.VITE_SERVER_WS_PORT;
@@ -31,6 +34,22 @@ onMounted(async () => {
   const topologiesResponse = await fetch(`${serverURL}/sites/fetch`);
   topologies.value = await topologiesResponse.json();
 
+  const ipInfoResponse = await fetch(`${serverURL}/ipInfo/fetch`);
+  const ipInfo = await ipInfoResponse.json();
+  const ipInfoMap = ipInfo.reduce((acc, info) => {
+    acc[info.ip] = info;
+    return acc;
+  }, {});
+  topologies.value.forEach((topology) => {
+    const locationId = ipInfoMap[topology.current.ip].locationId;
+    topology.current.location = locations.value[locationId];
+  });
+
+  globalStore.registerCallback({
+    name: "debug",
+    callback: () => console.debug("Callbacks have been called."),
+  });
+
   const ws = new WebSocket(wsURL);
 
   ws.onopen = () => {
@@ -39,18 +58,19 @@ onMounted(async () => {
 
   ws.onmessage = (message) => {
     const data = JSON.parse(message.data);
+    siteInfo.value = merge(siteInfo.value, data);
     for (const ip in data) {
       if (data[ip].ConnectionInfo !== undefined) {
         connectionInfo.value = data[ip].ConnectionInfo;
-        globalStore.runCallbacks();
       }
     }
+    globalStore.runCallbacks();
   };
 });
 </script>
 <template>
   <nav class="font-medium">
-    <div class="pt-4 px-4 text-3xl">OpenQKDDashboard</div>
+    <div class="pt-4 px-4 text-3xl">Open QKD Dashboard</div>
     <el-divider />
   </nav>
   <el-main>
@@ -61,7 +81,9 @@ onMounted(async () => {
         </el-card>
       </el-col>
       <el-col :span="8">
-        <el-card></el-card>
+        <el-card>
+          <SiteInfo />
+        </el-card>
       </el-col>
     </el-row>
     <el-row>

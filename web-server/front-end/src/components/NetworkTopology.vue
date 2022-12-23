@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted } from "vue";
+import { ref, reactive, onMounted } from "vue";
 import { storeToRefs } from "pinia";
 import * as vis from "vis-network";
 import { useGlobalStore } from "@/stores/global";
@@ -7,8 +7,15 @@ import { useGlobalStore } from "@/stores/global";
 const globalStore = useGlobalStore();
 const { connectionInfo, topologies } = storeToRefs(globalStore);
 
+const data = ref({
+  nodes: [],
+  edges: [],
+});
+
+let network = false;
+
 const networkOptions = {
-  layout: { clusterThreshold: 400 },
+  layout: { clusterThreshold: 800 },
   physics: {
     stabilization: false,
     barnesHut: {
@@ -90,7 +97,12 @@ const graph = () => {
     }
   }
   const container = document.getElementById("topology-canvas");
-  new vis.Network(container, { nodes, edges: links }, networkOptions);
+  data.value.nodes = nodes;
+  data.value.edges = links;
+  if (!network) {
+    network = new vis.Network(container, data.value, networkOptions);
+  }
+  network.setData(data.value);
 };
 
 onMounted(() => {

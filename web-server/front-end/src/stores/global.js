@@ -3,6 +3,7 @@ import { defineStore } from "pinia";
 
 export const useGlobalStore = defineStore("global", () => {
   const connectionInfo = ref({});
+  const siteInfo = ref({});
   const locations = ref({});
   const topologies = ref([]);
   const callbacks = ref([]);
@@ -14,8 +15,8 @@ export const useGlobalStore = defineStore("global", () => {
   }
 
   function registerCallback(callback) {
-    for (const callback of callbacks.value) {
-      if (callback.name == "name") {
+    for (const { name } of callbacks.value) {
+      if (callback.name == name) {
         return;
       }
     }
@@ -24,6 +25,7 @@ export const useGlobalStore = defineStore("global", () => {
 
   return {
     connectionInfo,
+    siteInfo,
     locations,
     topologies,
     callbacks,
