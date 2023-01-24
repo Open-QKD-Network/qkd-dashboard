@@ -5,7 +5,8 @@ import Plotly from "plotly.js-dist";
 import { useGlobalStore } from "@/stores/global";
 
 const PUBLIC_IP = import.meta.env.VITE_PUBLIC_IP;
-const url = `http://${PUBLIC_IP}:8001/api/v1`;
+const API_PORT = import.meta.env.VITE_SERVER_API_PORT
+const url = `http://${PUBLIC_IP}:${API_PORT}/api/v1`;
 
 const globalStore = useGlobalStore();
 const { connectionInfo, locations, topologies } = storeToRefs(globalStore);

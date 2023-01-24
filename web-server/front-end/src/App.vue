@@ -21,7 +21,8 @@ const { connectionInfo, siteInfo, locations, topologies } =
 
 const PUBLIC_IP = import.meta.env.VITE_PUBLIC_IP;
 const WS_PORT = import.meta.env.VITE_SERVER_WS_PORT;
-const serverURL = `http://${PUBLIC_IP}:8001/api/v1`;
+const API_PORT = import.meta.env.VITE_SERVER_API_PORT;
+const serverURL = `http://${PUBLIC_IP}:${API_PORT}/api/v1`;
 const wsURL = `ws://${PUBLIC_IP}:${WS_PORT}`;
 
 onMounted(async () => {
