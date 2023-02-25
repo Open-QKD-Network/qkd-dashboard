@@ -27,7 +27,7 @@ module.exports = class KeyProduction {
      * @returns Number of keys for neighbout site.
      */
     getKeyCount = function (neighbourId) {
-        return fs.readdirSync(`${this.dest}/${neighbourId}`).length - 1;
+        return (fs.readdirSync(`${this.dest}/${neighbourId}`).length - 1) * 4096;
     }
     
     /**
